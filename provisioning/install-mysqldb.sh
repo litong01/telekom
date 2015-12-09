@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# $1 db_password
+# $1 sys_password
 # $2 management network ip
 
 source /vagrant/provisioning/ini-config
@@ -24,7 +24,10 @@ iniset /etc/mysql/conf.d/mysqld_openstack.cnf mysqld character-set-server utf8
 service mysql restart
 
 # Create needed databases
+IFS=. read -ra parts <<< $2 && subnet=`echo ${parts[0]}.${parts[1]}.${parts[2]}.%`
+echo "Management network:"${subnet}
 for db in keystone neutron nova glance cinder; do
   mysql -uroot -p$1 -e "CREATE DATABASE $db;"
-  mysql -uroot -p$1 -e "use $db; GRANT ALL ON $db TO '$db'@'192.168.1.%' IDENTIFIED BY '$1';"
+  mysql -uroot -p$1 -e "use $db; GRANT ALL PRIVILEGES ON $db.* TO '$db'@'localhost' IDENTIFIED BY '$1';"
+  mysql -uroot -p$1 -e "use $db; GRANT ALL PRIVILEGES ON $db.* TO '$db'@'$subnet' IDENTIFIED BY '$1';"
 done

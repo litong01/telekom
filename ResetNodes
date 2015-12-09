@@ -20,12 +20,12 @@ Vagrant.configure("2") do |config|
       end
 
       node.vm.provision "reset", type: "shell" do |s|
-        s.path = "provisioning/sys/reset_node.sh"
+        s.path = "provisioning/sys/reset-node.sh"
         s.args = nodes[key]['eth1']
       end
 
       node.vm.provision "install-common", type: "shell" do |s|
-        s.path = "provisioning/sys/install_common.sh"
+        s.path = "provisioning/sys/install-common.sh"
       end
     end
   end
