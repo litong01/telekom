@@ -78,7 +78,7 @@ echo "export OS_PROJECT_NAME=demo" >> ~/demo-openrc.sh
 echo "export OS_TENANT_NAME=demo" >> ~/demo-openrc.sh
 echo "export OS_USERNAME=demo" >> ~/demo-openrc.sh
 echo "export OS_PASSWORD=$1" >> ~/demo-openrc.sh
-echo "export OS_AUTH_URL=http://keystone:35357/v3" >> ~/demo-openrc.sh
+echo "export OS_AUTH_URL=http://keystone:5000/v3" >> ~/demo-openrc.sh
 echo "export OS_IDENTITY_API_VERSION=3" >> ~/demo-openrc.sh
 
 for key in 'pipeline:public_api' 'pipeline:admin_api' 'pipeline:api_v3'; do
