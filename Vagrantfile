@@ -17,10 +17,27 @@ Vagrant.configure("2") do |config|
       managed.server = nodes['mysqldb']['eth0']
     end
 
-    mysqldb.vm.provision "install", type: "shell" do |s|
+    mysqldb.vm.provision "mysqldb-install", type: "shell" do |s|
         s.path = "provisioning/install-mysqldb.sh"
-        s.args = ids['sqldb_password'] + ' ' + nodes['mysqldb']['eth1']
+        s.args = ids['sys_password'] + ' ' + nodes['mysqldb']['eth1']
     end
+  end
+
+  config.vm.define "keystone" do |keystone|
+    keystone.vm.provider :managed do |managed|
+      managed.server = nodes['keystone']['eth0']
+    end
+
+    keystone.vm.provision "rabbitmq-install", type: "shell" do |s|
+        s.path = "provisioning/install-rabbitmq.sh"
+        s.args = ids['sys_password']
+    end
+
+    keystone.vm.provision "keystone-install", type: "shell" do |s|
+        s.path = "provisioning/install-keystone.sh"
+        s.args = ids['sys_password']
+    end
+
   end
 
 end
