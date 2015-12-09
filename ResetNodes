@@ -9,7 +9,6 @@ ids = YAML.load_file("provisioning/ids.conf.yml")
 
 Vagrant.configure("2") do |config|
   config.vm.box = "tknerr/managed-server-dummy"
-  config.vm.synced_folder "provisioning/guest", "/opt/guest"
 
   config.ssh.username = ids['username']
   config.ssh.password = ids['password']
