@@ -9,7 +9,6 @@ ids = YAML.load_file("provisioning/ids.conf.yml")
 
 Vagrant.configure("2") do |config|
   config.vm.box = "tknerr/managed-server-dummy"
-  config.vm.synced_folder "provisioning/", "/opt/provisioning"
   config.ssh.username = ids['username']
   config.ssh.password = ids['password']
 
@@ -20,6 +19,7 @@ Vagrant.configure("2") do |config|
 
     mysqldb.vm.provision "install", type: "shell" do |s|
         s.path = "provisioning/install-mysqldb.sh"
+        s.args = ids['sqldb_password'] + ' ' + nodes['mysqldb']['eth1']
     end
   end
 
