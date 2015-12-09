@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
     # keystone install
     keystone.vm.provision "keystone-install", type: "shell" do |s|
         s.path = "provisioning/install-keystone.sh"
-        s.args = ids['sys_password']
+        s.args = ids['sys_password'] + " " + nodes['keystone']['eth0']
     end
 
   end
