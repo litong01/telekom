@@ -15,12 +15,15 @@ you will be working on. Also create an id file named ids.conf.yml and
 place it in provisioning directory, here is an example of that file::
 
     ---
-    username: "tong"
-
-    password: "ps"
-
+    username: "name"
+    password: "pass"
     sys_password: "openstack"
 
+
+The username and password should be the user name and password to log
+in to your physical servers, the id should be able to configured to
+automatically become root user. The sys_password will be the password
+used for all your OpenStack service password.
 
 Once all the settings look good, you can run the following command to set
 things up::
