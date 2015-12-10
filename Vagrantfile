@@ -53,7 +53,20 @@ Vagrant.configure("2") do |config|
     # glance install
     glance.vm.provision "glance-install", type: "shell" do |s|
         s.path = "provisioning/install-glance.sh"
-        s.args = ids['sys_password'] + " " + nodes['keystone']['eth0']
+        s.args = ids['sys_password'] + " " + nodes['glance']['eth0']
+    end
+  end
+
+  # nova setup
+  config.vm.define "nova" do |nova|
+    nova.vm.provider :managed do |managed|
+      managed.server = nodes['nova']['eth0']
+    end
+
+    # nova install
+    nova.vm.provision "nova-install", type: "shell" do |s|
+        s.path = "provisioning/install-nova.sh"
+        s.args = ids['sys_password'] + " " + nodes['nova']['eth0'] + " " + nodes['nova']['eth1']
     end
   end
 
