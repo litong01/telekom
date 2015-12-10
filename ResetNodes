@@ -9,9 +9,11 @@ ids = YAML.load_file("provisioning/ids.conf.yml")
 
 Vagrant.configure("2") do |config|
   config.vm.box = "tknerr/managed-server-dummy"
-
   config.ssh.username = ids['username']
   config.ssh.password = ids['password']
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder "onvm", "/onvm", disabled: false, create: true
 
   nodes.each do |key, value|
     config.vm.define "#{key}" do |node|
@@ -20,12 +22,12 @@ Vagrant.configure("2") do |config|
       end
 
       node.vm.provision "reset", type: "shell" do |s|
-        s.path = "provisioning/sys/reset-node.sh"
+        s.path = "onvm/scripts/reset/reset-node.sh"
         s.args = nodes[key]['eth1']
       end
 
       node.vm.provision "install-common", type: "shell" do |s|
-        s.path = "provisioning/sys/install-common.sh"
+        s.path = "onvm/scripts/reset/install-common.sh"
       end
     end
   end

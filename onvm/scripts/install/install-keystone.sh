@@ -2,7 +2,7 @@
 # $1 sys_password
 # $2 public ip
 
-source /vagrant/provisioning/ini-config
+source /onvm/scripts/ini-config
 
 echo "manual" > /etc/init/keystone.override
 
@@ -30,7 +30,7 @@ su -s /bin/sh -c "keystone-manage db_sync" keystone
 
 echo "Keystone configuration is done!"
 
-cp /vagrant/provisioning/wsgi-keystone.conf /etc/apache2/sites-available/
+cp /onvm/conf/wsgi-keystone.conf /etc/apache2/sites-available/
 ln -s /etc/apache2/sites-available/wsgi-keystone.conf /etc/apache2/sites-enabled
 
 service apache2 restart

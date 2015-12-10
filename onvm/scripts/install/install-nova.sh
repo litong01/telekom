@@ -3,7 +3,7 @@
 # $2 public ip eth0
 # $3 private ip eth1
 
-source /vagrant/provisioning/ini-config
+source /onvm/scripts/ini-config
 
 apt-get install -qqy nova-api nova-cert nova-conductor nova-consoleauth nova-novncproxy nova-scheduler python-novaclient
 

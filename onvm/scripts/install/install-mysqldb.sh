@@ -2,7 +2,7 @@
 # $1 sys_password
 # $2 management network ip
 
-source /vagrant/provisioning/ini-config
+source /onvm/scripts/ini-config
 
 debconf-set-selections <<< "mariadb-server-5.5 mysql-server/root_password password $1"
 debconf-set-selections <<< "mariadb-server-5.5 mysql-server/root_password_again password $1"

@@ -3,12 +3,13 @@
 # $2 public ip eth0
 # $3 private ip eth1
 
-source /vagrant/provisioning/ini-config
+source /onvm/scripts/ini-config
 
-apt-get install -qqy nova-compute sysfsutils
+apt-get install -qqy nova-api nova-cert nova-conductor nova-consoleauth nova-novncproxy nova-scheduler python-novaclient
 
-echo "Compute packages are installed!"
+echo "Nova packages are installed!"
 
+iniset /etc/nova/nova.conf database connection "mysql+pymysql://nova:$1@mysqldb/nova"
 iniset /etc/nova/nova.conf DEFAULT rpc_backend 'rabbit'
 iniset /etc/nova/nova.conf DEFAULT verbose 'True'
 iniset /etc/nova/nova.conf DEFAULT auth_strategy 'keystone'
@@ -20,10 +21,8 @@ iniset /etc/nova/nova.conf DEFAULT security_group_api 'neutron'
 iniset /etc/nova/nova.conf DEFAULT linuxnet_interface_driver 'nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver'
 iniset /etc/nova/nova.conf DEFAULT firewall_driver 'nova.virt.firewall.NoopFirewallDriver'
 
-iniset /etc/nova/nova.conf vnc vncserver_listen '0.0.0.0'
+iniset /etc/nova/nova.conf vnc vncserver_listen '$my_ip'
 iniset /etc/nova/nova.conf vnc vncserver_proxyclient_address '$my_ip'
-iniset /etc/nova/nova.conf vnc enabled 'True'
-iniset /etc/nova/nova.conf vnc novncproxy_base_url 'http://nova:6080/vnc_auto.html'
 
 iniset /etc/nova/nova.conf glance host 'glance'
 
@@ -43,12 +42,16 @@ iniset /etc/nova/nova.conf keystone_authtoken project_name 'service'
 iniset /etc/nova/nova.conf keystone_authtoken username 'nova'
 iniset /etc/nova/nova.conf keystone_authtoken password $1
 
-# This is only for development
-iniset /etc/nova/nova.conf libvirt virt_type 'qemu'
+su -s /bin/sh -c "nova-manage db sync" nova
 
-service nova-compute start
+service nova-api restart
+service nova-cert restart
+service nova-consoleauth restart
+service nova-scheduler restart
+service nova-conductor restart
+service nova-novncproxy restart
 
 rm -f /var/lib/nova/nova.sqlite
 
-echo "Compute setup is now complete!"
+echo "Nova setup is now complete!"
 

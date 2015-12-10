@@ -12,6 +12,9 @@ Vagrant.configure("2") do |config|
   config.ssh.username = ids['username']
   config.ssh.password = ids['password']
 
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder "onvm", "/onvm", disabled: false, create: true
+
   # database server setup
   config.vm.define "mysqldb" do |mysqldb|
     mysqldb.vm.provider :managed do |managed|
@@ -19,7 +22,7 @@ Vagrant.configure("2") do |config|
     end
 
     mysqldb.vm.provision "mysqldb-install", type: "shell" do |s|
-        s.path = "provisioning/install-mysqldb.sh"
+        s.path = "onvm/scripts/install/install-mysqldb.sh"
         s.args = ids['sys_password'] + ' ' + nodes['mysqldb']['eth1']
     end
   end
@@ -33,13 +36,13 @@ Vagrant.configure("2") do |config|
     # rabbitmq is added on keystone machine, so we do rabbitmq setup
     # also in this block
     keystone.vm.provision "rabbitmq-install", type: "shell" do |s|
-        s.path = "provisioning/install-rabbitmq.sh"
+        s.path = "onvm/scripts/install/install-rabbitmq.sh"
         s.args = ids['sys_password']
     end
 
     # keystone install
     keystone.vm.provision "keystone-install", type: "shell" do |s|
-        s.path = "provisioning/install-keystone.sh"
+        s.path = "onvm/scripts/install/install-keystone.sh"
         s.args = ids['sys_password'] + " " + nodes['keystone']['eth0']
     end
   end
@@ -52,7 +55,7 @@ Vagrant.configure("2") do |config|
 
     # glance install
     glance.vm.provision "glance-install", type: "shell" do |s|
-        s.path = "provisioning/install-glance.sh"
+        s.path = "onvm/scripts/install/install-glance.sh"
         s.args = ids['sys_password'] + " " + nodes['glance']['eth0']
     end
   end
@@ -65,7 +68,7 @@ Vagrant.configure("2") do |config|
 
     # nova install
     nova.vm.provision "nova-install", type: "shell" do |s|
-        s.path = "provisioning/install-nova.sh"
+        s.path = "onvm/scripts/install/install-nova.sh"
         s.args = ids['sys_password'] + " " + nodes['nova']['eth0'] + " " + nodes['nova']['eth1']
     end
   end
@@ -79,7 +82,7 @@ Vagrant.configure("2") do |config|
       end
 
       node.vm.provision "compute-install", type: "shell" do |s|
-        s.path = "provisioning/install-compute.sh"
+        s.path = "onvm/scripts/install/install-compute.sh"
         s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
       end
     end

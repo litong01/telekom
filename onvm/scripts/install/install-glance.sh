@@ -2,7 +2,7 @@
 # $1 sys_password
 # $2 public ip
 
-source /vagrant/provisioning/ini-config
+source /onvm/scripts/ini-config
 
 apt-get install -qqy glance python-glanceclient
 
