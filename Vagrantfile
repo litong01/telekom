@@ -42,7 +42,19 @@ Vagrant.configure("2") do |config|
         s.path = "provisioning/install-keystone.sh"
         s.args = ids['sys_password'] + " " + nodes['keystone']['eth0']
     end
+  end
 
+  # glance setup
+  config.vm.define "glance" do |glance|
+    glance.vm.provider :managed do |managed|
+      managed.server = nodes['glance']['eth0']
+    end
+
+    # glance install
+    glance.vm.provision "glance-install", type: "shell" do |s|
+        s.path = "provisioning/install-glance.sh"
+        s.args = ids['sys_password'] + " " + nodes['keystone']['eth0']
+    end
   end
 
 end

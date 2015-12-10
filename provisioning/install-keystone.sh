@@ -87,4 +87,41 @@ for key in 'pipeline:public_api' 'pipeline:admin_api' 'pipeline:api_v3'; do
   iniset /etc/keystone/keystone-paste.ini $key pipeline "$val1"
 done
 
+
+unset OS_TOKEN
+unset OS_URL
+unset OS_IDENTITY_API_VERSION
+
+echo "Set up endpoints for glance, cinder, nova and neutron"
+
+source ~/admin-openrc.sh
+for key in glance cinder nova neutron; do
+  openstack user create --domain default --password $1 $key
+  openstack role add --project service --user $key admin
+done
+
+openstack service create --name glance --description "OpenStack Image service" image
+openstack endpoint create --region RegionOne image public http://glance:9292
+openstack endpoint create --region RegionOne image internal http://glance:9292
+openstack endpoint create --region RegionOne image admin http://glance:9292
+
+openstack service create --name nova --description "OpenStack Compute" compute
+openstack endpoint create --region RegionOne compute public http://nova:8774/v2/%\(tenant_id\)s
+openstack endpoint create --region RegionOne compute internal http://nova:8774/v2/%\(tenant_id\)s
+openstack endpoint create --region RegionOne compute admin http://nova:8774/v2/%\(tenant_id\)s
+
+openstack service create --name neutron --description "OpenStack Networking" network
+openstack endpoint create --region RegionOne network public http://neutron:9696
+openstack endpoint create --region RegionOne network internal http://neutron:9696
+openstack endpoint create --region RegionOne network admin http://neutron:9696
+
+openstack service create --name cinder --description "OpenStack Block Storage" volume
+openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+openstack endpoint create --region RegionOne volume public http://cinder:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volume internal http://cinder:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volume admin http://cinder:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev2 public http://cinder:8776/v2/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev2 internal http://cinder:8776/v1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne volumev2 admin http://cinder:8776/v1/%\(tenant_id\)s
+
 echo "Keystone setup is now complete!"
