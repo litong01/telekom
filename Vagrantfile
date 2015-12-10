@@ -70,4 +70,18 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # compute node setup
+  compute_nodes = nodes.keys.select{|item| item.start_with?('compute')}
+  compute_nodes.each do |key|
+    config.vm.define "#{key}" do |node|
+      node.vm.provider :managed do |managed|
+        managed.server = nodes[key]['eth0']
+      end
+
+      node.vm.provision "compute-install", type: "shell" do |s|
+        s.path = "provisioning/install-compute.sh"
+        s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
+      end
+    end
+  end
 end
