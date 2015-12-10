@@ -60,6 +60,19 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # neutron node setup
+  config.vm.define "neutron" do |neutron|
+    neutron.vm.provider :managed do |managed|
+      managed.server = nodes['neutron']['eth0']
+    end
+
+    # neutron install
+    neutron.vm.provision "neutron-install", type: "shell" do |s|
+        s.path = "onvm/scripts/install/install-neutron.sh"
+        s.args = ids['sys_password'] + " " + nodes['neutron']['eth0'] + " " + nodes['neutron']['eth1']
+    end
+  end
+
   # nova setup
   config.vm.define "nova" do |nova|
     nova.vm.provider :managed do |managed|
@@ -87,4 +100,6 @@ Vagrant.configure("2") do |config|
       end
     end
   end
+
+
 end

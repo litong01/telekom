@@ -5,7 +5,8 @@
 
 source /onvm/scripts/ini-config
 
-apt-get install -qqy nova-api nova-cert nova-conductor nova-consoleauth nova-novncproxy nova-scheduler python-novaclient
+apt-get install -qqy nova-api nova-cert nova-conductor nova-consoleauth \
+  nova-novncproxy nova-scheduler python-novaclient
 
 echo "Nova packages are installed!"
 
