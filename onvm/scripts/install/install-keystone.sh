@@ -33,6 +33,8 @@ echo "Keystone configuration is done!"
 cp /onvm/conf/wsgi-keystone.conf /etc/apache2/sites-available/
 ln -s /etc/apache2/sites-available/wsgi-keystone.conf /etc/apache2/sites-enabled
 
+iniremcomment /etc/keystone/keystone.conf
+
 service apache2 restart
 
 rm -f /var/lib/keystone/keystone.db

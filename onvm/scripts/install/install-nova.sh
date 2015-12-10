@@ -43,6 +43,8 @@ iniset /etc/nova/nova.conf keystone_authtoken project_name 'service'
 iniset /etc/nova/nova.conf keystone_authtoken username 'nova'
 iniset /etc/nova/nova.conf keystone_authtoken password $1
 
+iniremcomment /etc/nova/nova.conf
+
 su -s /bin/sh -c "nova-manage db sync" nova
 
 service nova-api restart

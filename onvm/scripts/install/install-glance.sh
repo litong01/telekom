@@ -55,6 +55,10 @@ iniset /etc/glance/glance-registry.conf keystone_authtoken password $1
 
 iniset /etc/glance/glance-registry.conf 'paste_deploy' 'flavor' 'keystone'
 
+# Cleanup configuration files
+iniremcomment /etc/glance/glance-api.conf 
+iniremcomment /etc/glance/glance-registry.conf
+
 su -s /bin/sh -c "glance-manage db_sync" glance
 
 service glance-registry restart

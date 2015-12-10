@@ -261,6 +261,24 @@ function iniuncomment {
     $xtrace
 }
 
+## Remove all comments in a file
+function iniremcomment {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local sudo=""
+    if [ $1 == "-sudo" ]; then
+        sudo="sudo "
+        shift
+    fi
+    local file=$1
+    local tpfile="$(mktemp)"
+    $sudo grep -v "^\#" $1 | sed '/^$/N;/^\n$/D' > $tpfile
+    $sudo cp $tpfile $1
+    $sudo rm -rf $tmpfile
+    $xtrace
+}
+
 # Restore xtrace
 $INC_CONF_TRACE
 

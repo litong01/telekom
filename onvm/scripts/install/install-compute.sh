@@ -93,6 +93,12 @@ iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent prevent_arp_spoofing
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup firewall_driver 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
 
+
+iniremcomment /etc/nova/nova.conf
+iniremcomment /etc/neutron/neutron.conf
+iniremcomment /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+
+
 rm -f /var/lib/nova/nova.sqlite
 
 service nova-compute restart

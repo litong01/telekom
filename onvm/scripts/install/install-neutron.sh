@@ -103,6 +103,15 @@ iniset /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip 'neutron'
 iniset /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret $1
 iniset /etc/neutron/metadata_agent.ini DEFAULT verbose 'True'
 
+# clean up configuration files
+
+iniremcomment /etc/neutron/neutron.conf
+iniremcomment /etc/neutron/plugins/ml2/ml2_conf.ini
+iniremcomment /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+iniremcomment /etc/neutron/l3_agent.ini
+iniremcomment /etc/neutron/dhcp_agent.ini
+iniremcomment /etc/neutron/metadata_agent.ini
+
 su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
   --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 
