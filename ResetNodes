@@ -6,7 +6,6 @@ require 'yaml'
 nodes = YAML.load_file("provisioning/nodes.conf.yml")
 ids = YAML.load_file("provisioning/ids.conf.yml")
 
-
 Vagrant.configure("2") do |config|
   config.vm.box = "tknerr/managed-server-dummy"
   config.ssh.username = ids['username']
@@ -16,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "onvm", "/onvm", disabled: false, create: true
 
   nodes.each do |key, value|
-    if ['cinder', 'horizon', 'heat'].include?(key) is false then
+    if ['cinder', 'horizon', 'heat'].include?(key) == false then
       config.vm.define "#{key}" do |node|
         node.vm.provider :managed do |managed|
           managed.server = nodes[key]['eth0']
