@@ -1,9 +1,4 @@
 ---
-tongdev:
-  host_name: tondev.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.8
-
 mysqldb:
   host_name: mysqldb.leap.dev
   eth0: 9.30.107.132
@@ -14,8 +9,18 @@ keystone:
   eth0: 9.30.107.133
   eth1: 192.168.1.133
 
+horizon:
+  host_name: horizon.leap.dev
+  eth0: 9.30.107.133
+  eth1: 192.168.1.133
+
 glance:
   host_name: glance.leap.dev
+  eth0: 9.30.107.134
+  eth1: 192.168.1.134
+
+cinder:
+  host_name: cinder.leap.dev
   eth0: 9.30.107.134
   eth1: 192.168.1.134
 
@@ -26,6 +31,11 @@ neutron:
 
 nova:
   host_name: nova.leap.dev
+  eth0: 9.30.107.136
+  eth1: 192.168.1.136
+
+heat:
+  host_name: heat.leap.dev
   eth0: 9.30.107.136
   eth1: 192.168.1.136
 

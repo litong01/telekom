@@ -12,6 +12,9 @@ sed -i -e 's/^TIME_ZONE = "UTC"/TIME_ZONE = "EST"/g' /etc/openstack-dashboard/lo
 
 sed -i -e "s/^ALLOWED_HOSTS = '\*'/ALLOWED_HOSTS = ['*', ]/" /etc/openstack-dashboard/local_settings.py
 
+# Do this to make the browser go to the horizon app
+cp /onvm/conf/index.html /var/www/html
+
 service apache2 reload
 
 echo 'Horizon installation is now complete'

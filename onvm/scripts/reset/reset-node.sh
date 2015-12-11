@@ -20,7 +20,7 @@ echo -e "192.168.1.132 mysqldb" >> /space/snap/etc/hosts
 echo -e "192.168.1.133 keystone horizon rabbitmq" >> /space/snap/etc/hosts
 echo -e "192.168.1.134 glance cinder" >> /space/snap/etc/hosts
 echo -e "192.168.1.135 neutron" >> /space/snap/etc/hosts
-echo -e "192.168.1.136 nova" >> /space/snap/etc/hosts
+echo -e "192.168.1.136 nova heat" >> /space/snap/etc/hosts
 echo -e "192.168.1.137 compute01" >> /space/snap/etc/hosts
 echo -e "192.168.1.138 compute02" >> /space/snap/etc/hosts
 echo -e "192.168.1.139 compute03" >> /space/snap/etc/hosts

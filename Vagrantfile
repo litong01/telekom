@@ -112,6 +112,18 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # heat setup
+  config.vm.define "heat" do |heat|
+    heat.vm.provider :managed do |managed|
+      managed.server = nodes['heat']['eth0']
+    end
+
+    # heat install
+    heat.vm.provision "heat-install", type: "shell" do |s|
+        s.path = "onvm/scripts/install/install-heat.sh"
+        s.args = ids['sys_password'] + " " + nodes['heat']['eth0'] + " " + nodes['heat']['eth1']
+    end
+  end
 
   # compute node setup
   compute_nodes = nodes.keys.select{|item| item.start_with?('compute')}
