@@ -19,6 +19,11 @@ glance:
   eth0: 192.168.1.75
   eth1: 192.168.15.8
 
+cinder:
+  host_name: cinder.leap.dev
+  eth0: 192.168.1.75
+  eth1: 192.168.15.8
+
 neutron:
   host_name: neutron.leap.dev
   eth0: 192.168.1.75

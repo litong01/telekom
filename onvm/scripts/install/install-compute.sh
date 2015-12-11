@@ -59,6 +59,10 @@ iniset /etc/nova/nova.conf neutron service_metadata_proxy 'True'
 iniset /etc/nova/nova.conf neutron metadata_proxy_shared_secret $1
 
 
+# Configure nova to use cinder
+iniset /etc/nova/nova.conf cinder os_region_name  'RegionOne'
+
+
 # This is only for development
 iniset /etc/nova/nova.conf libvirt virt_type 'qemu'
 

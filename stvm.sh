@@ -1,2 +1,2 @@
-vboxmanage controlvm vagrantcompute acpipowerbutton
+vboxmanage controlvm UbuntuLVM acpipowerbutton
 vboxmanage controlvm vagrantcontrol acpipowerbutton

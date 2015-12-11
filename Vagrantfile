@@ -60,6 +60,19 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # cinder setup
+  config.vm.define "cinder" do |cinder|
+    cinder.vm.provider :managed do |managed|
+      managed.server = nodes['cinder']['eth0']
+    end
+
+    # cinder install
+    cinder.vm.provision "cinder-install", type: "shell" do |s|
+        s.path = "onvm/scripts/install/install-cinder.sh"
+        s.args = ids['sys_password'] + " " + nodes['cinder']['eth0'] + " " + nodes['cinder']['eth1']
+    end
+  end
+
   # neutron node setup
   config.vm.define "neutron" do |neutron|
     neutron.vm.provider :managed do |managed|
@@ -112,8 +125,14 @@ Vagrant.configure("2") do |config|
         s.path = "onvm/scripts/install/install-compute.sh"
         s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
       end
+
+      # we will isntall cinder storage on each compute node as well
+      node.vm.provision "cinder-storage-install", type: "shell" do |s|
+        s.path = "onvm/scripts/install/install-cinder-storage.sh"
+        s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
+      end
+
     end
   end
-
 
 end
