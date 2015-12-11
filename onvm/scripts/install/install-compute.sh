@@ -64,7 +64,7 @@ iniset /etc/nova/nova.conf cinder os_region_name  'RegionOne'
 
 
 # This is only for development
-iniset /etc/nova/nova.conf libvirt virt_type 'qemu'
+# iniset /etc/nova/nova.conf libvirt virt_type 'qemu'
 
 
 # Configure neutron on compute node /etc/neutron/neutron.conf
