@@ -86,6 +86,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # horizon setup
+  config.vm.define "horizon" do |horizon|
+    horizon.vm.provider :managed do |managed|
+      managed.server = nodes['horizon']['eth0']
+    end
+
+    # horizon install
+    horizon.vm.provision "horizon-install", type: "shell" do |s|
+        s.path = "onvm/scripts/install/install-horizon.sh"
+        s.args = ids['sys_password'] + " " + nodes['horizon']['eth0'] + " " + nodes['horizon']['eth1']
+    end
+  end
+
+
   # compute node setup
   compute_nodes = nodes.keys.select{|item| item.start_with?('compute')}
   compute_nodes.each do |key|

@@ -9,6 +9,11 @@ keystone:
   eth0: 192.168.1.75
   eth1: 192.168.15.8
 
+horizon:
+  host_name: horizon.leap.dev
+  eth0: 192.168.1.75
+  eth1: 192.168.15.8
+
 glance:
   host_name: glance.leap.dev
   eth0: 192.168.1.75
