@@ -43,7 +43,7 @@ iniset /etc/neutron/neutron.conf nova auth_plugin 'password'
 iniset /etc/neutron/neutron.conf nova project_domain_id 'default'
 iniset /etc/neutron/neutron.conf nova user_domain_id 'default'
 iniset /etc/neutron/neutron.conf nova region_name 'RegionOne'
-iniset /etc/neutron/neutron.conf nova project_name = service
+iniset /etc/neutron/neutron.conf nova project_name 'service'
 iniset /etc/neutron/neutron.conf nova username 'nova'
 iniset /etc/neutron/neutron.conf nova password $1
 
