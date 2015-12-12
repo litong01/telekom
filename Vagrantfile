@@ -143,7 +143,6 @@ Vagrant.configure("2") do |config|
         s.path = "onvm/scripts/install/install-cinder-storage.sh"
         s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
       end
-
     end
   end
 

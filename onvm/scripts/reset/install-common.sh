@@ -6,3 +6,4 @@ apt-get -qqy update
 apt-get -qqy install python-openstackclient
 apt-get -qqy install chrony
 reboot
+exit

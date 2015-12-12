@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# clean up the /boot directory
+
+apt-get remove -y `dpkg --list 'linux-image*' |grep ^ii | awk '{print $2}'\ | grep -v \`uname -r\``
+apt-get -y autoremove
+
 vgname=$(vgdisplay | awk 'NR==2 { print $3 }')
 echo $vgname
 rm -r -f /space/snap/*
@@ -30,3 +36,4 @@ echo -e "192.168.1.141 compute05" >> /space/snap/etc/hosts
 umount /space/snap
 lvconvert --merge /dev/$vgname/resetpoint
 reboot
+exit
