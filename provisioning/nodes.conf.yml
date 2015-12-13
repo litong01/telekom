@@ -1,8 +1,8 @@
 ---
 mysqldb:
   host_name: mysqldb.leap.dev
-  eth0: 9.30.107.132
-  eth1: 192.168.1.132
+  eth0: 9.30.107.133
+  eth1: 192.168.1.133
 
 keystone:
   host_name: keystone.leap.dev

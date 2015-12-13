@@ -25,6 +25,7 @@ iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_host 'rabbitmq'
 iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_userid 'openstack'
 iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_password $1
 iniset /etc/neutron/neutron.conf DEFAULT auth_strategy 'keystone'
+
 iniset /etc/neutron/neutron.conf keystone_authtoken auth_uri 'http://keystone:5000'
 iniset /etc/neutron/neutron.conf keystone_authtoken auth_url 'http://keystone:35357'
 iniset /etc/neutron/neutron.conf keystone_authtoken auth_plugin 'password'
@@ -33,6 +34,11 @@ iniset /etc/neutron/neutron.conf keystone_authtoken user_domain_id 'default'
 iniset /etc/neutron/neutron.conf keystone_authtoken project_name 'service'
 iniset /etc/neutron/neutron.conf keystone_authtoken username 'neutron'
 iniset /etc/neutron/neutron.conf keystone_authtoken password $1
+
+inidelete /etc/neutron/neutron.conf keystone_authtoken identity_uri
+inidelete /etc/neutron/neutron.conf keystone_authtoken admin_tenant_name
+inidelete /etc/neutron/neutron.conf keystone_authtoken admin_user
+inidelete /etc/neutron/neutron.conf keystone_authtoken admin_password
 
 iniset /etc/neutron/neutron.conf DEFAULT notify_nova_on_port_status_changes 'True'
 iniset /etc/neutron/neutron.conf DEFAULT notify_nova_on_port_data_changes 'True'

@@ -3,7 +3,7 @@
 
 require 'yaml'
 
-nodes = YAML.load_file("provisioning/nodes.conf.yml")
+nodes = YAML.load_file("provisioning/nodes.dev.conf.yml")
 ids = YAML.load_file("provisioning/ids.conf.yml")
 
 

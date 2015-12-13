@@ -27,19 +27,20 @@ cinder:
 neutron:
   host_name: neutron.leap.dev
   eth0: 192.168.1.75
-  eth1: 192.168.15.8
+  eth1: 192.168.15.85
 
 nova:
   host_name: nova.leap.dev
   eth0: 192.168.1.75
-  eth1: 192.168.15.8
+  eth1: 192.168.15.86
 
 heat:
   host_name: heat.leap.dev
   eth0: 192.168.1.75
-  eth1: 192.168.15.8
+  eth1: 192.168.15.86
 
 compute01:
   host_name: compute01.leap.dev
   eth0: 192.168.1.76
   eth1: 192.168.15.9
+

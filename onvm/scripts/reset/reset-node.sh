@@ -7,6 +7,13 @@ apt-get -y autoremove
 
 vgname=$(vgdisplay | awk 'NR==2 { print $3 }')
 echo $vgname
+
+sp=$(lvdisplay | grep resetpoint)
+if [ "$sp" ];then
+   echo 'Ready to remove older resetpoint'
+   lvremove -f "/dev/${vgname}/resetpoint"
+fi
+
 rm -r -f /space/snap/*
 lvcreate --size 20G -s -n resetpoint /dev/$vgname/root
 mount /dev/$vgname/resetpoint /space/snap
@@ -22,8 +29,8 @@ echo -e "  address $1" >> /space/snap/etc/network/interfaces
 echo -e "  netmask 255.255.255.0" >> /space/snap/etc/network/interfaces
 
 echo -e "" >> /space/snap/etc/hosts
-echo -e "192.168.1.132 mysqldb" >> /space/snap/etc/hosts
-echo -e "192.168.1.133 keystone horizon rabbitmq" >> /space/snap/etc/hosts
+#echo -e "192.168.1.132 mysqldb" >> /space/snap/etc/hosts
+echo -e "192.168.1.133 mysqldb keystone horizon rabbitmq" >> /space/snap/etc/hosts
 echo -e "192.168.1.134 glance cinder" >> /space/snap/etc/hosts
 echo -e "192.168.1.135 neutron" >> /space/snap/etc/hosts
 echo -e "192.168.1.136 nova heat" >> /space/snap/etc/hosts
