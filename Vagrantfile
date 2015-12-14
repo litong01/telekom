@@ -166,7 +166,6 @@ Vagrant.configure("2") do |config|
         s.path = "onvm/scripts/install/init-node-02.sh"
         s.args = ids['sys_password']
       end
-
   end
 
 end
