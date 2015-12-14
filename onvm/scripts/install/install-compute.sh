@@ -62,10 +62,11 @@ iniset /etc/nova/nova.conf neutron metadata_proxy_shared_secret $1
 # Configure nova to use cinder
 iniset /etc/nova/nova.conf cinder os_region_name  'RegionOne'
 
-
-# This is only for development
-# iniset /etc/nova/nova.conf libvirt virt_type 'qemu'
-
+# if we have to use qemu
+doqemu=$(egrep -c '(vmx|svm)' /proc/cpuinfo)
+if [ $doqemu -eq 0 ]; then
+     iniset /etc/nova/nova.conf libvirt virt_type 'qemu'
+fi
 
 # Configure neutron on compute node /etc/neutron/neutron.conf
 echo "Configure neutron on compute node"
