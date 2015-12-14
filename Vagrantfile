@@ -146,4 +146,27 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # do initial setup to create public and private network
+  # all initialization should run on keystone node
+  config.vm.define "init-node" do |node|
+      node.vm.provider :managed do |managed|
+        managed.server = nodes['keystone']['eth0']
+      end
+
+      node.vm.provision "init-node-01", type: "shell" do |s|
+        s.path = "onvm/scripts/install/init-node-01.sh"
+        s.args = ids['sys_password'] + " "
+        s.args += ids['public_net']['id'] + " "
+        s.args += ids['public_net']['start_ip'] + " "
+        s.args += ids['public_net']['end_ip'] + " "
+        s.args += ids['public_net']['gateway']
+      end
+
+      node.vm.provision "init-node-02", type: "shell" do |s|
+        s.path = "onvm/scripts/install/init-node-02.sh"
+        s.args = ids['sys_password']
+      end
+
+  end
+
 end

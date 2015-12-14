@@ -19,11 +19,19 @@ place it in provisioning directory, here is an example of that file::
     password: "pass"
     sys_password: "openstack"
 
+    public_net:
+      id: 192.168.1.0/24
+      start_ip: 192.168.1.210
+      end_ip: 192.168.1.219
+      gateway: 192.168.1.1
 
 The username and password should be the user name and password to log
 in to your physical servers, the id should be able to configured to
 automatically become root user. The sys_password will be the password
 used for all your OpenStack service password.
+
+The public net section should indicate how the public flat network should
+be setup.
 
 Once all the settings look good, you can run the following command to set
 things up::
