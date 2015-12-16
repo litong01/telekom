@@ -20,17 +20,17 @@ if [ ! "$sp" ];then
    echo 'Ready to create space logical volume!'
    lvcreate -l 100%FREE -n space vg01
    mkfs -t ext4 /dev/vg01/space
+   
    mount /dev/vg01/space target
+   mount /dev/vg00/resetpoint source
+
+   cd source
+   tar -pczf ../target/cleansystem.tar.gz *
+   cd $dir
+
+   umount source
+   umount target
 fi
-
-mount /dev/vg00/resetpoint source
-
-cd source
-tar -pczf ../target/cleansystem.tar.gz *
-cd $dir
-
-umount source
-umount target
 
 lvremove -f "/dev/vg00/resetpoint"
 
