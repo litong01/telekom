@@ -31,3 +31,12 @@ for db in keystone neutron nova glance cinder heat; do
   mysql -uroot -p$1 -e "use $db; GRANT ALL PRIVILEGES ON $db.* TO '$db'@'localhost' IDENTIFIED BY '$1';"
   mysql -uroot -p$1 -e "use $db; GRANT ALL PRIVILEGES ON $db.* TO '$db'@'%' IDENTIFIED BY '$1';"
 done
+
+mkdir -p /storage
+sp=$(lvdisplay | grep /dev/vg02/storage)
+if [ ! "$sp" ];then
+  echo 'Ready to create mysqldb storage'
+  lvcreate -l 100%FREE -n storage vg02
+  mkfs -t ext4 /dev/vg02/storage
+  mount /dev/vg02/storage /storage/
+fi

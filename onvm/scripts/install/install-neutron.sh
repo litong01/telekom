@@ -130,5 +130,14 @@ service neutron-l3-agent restart
 
 rm -f /var/lib/neutron/neutron.sqlite
 
+mkdir -p /storage
+sp=$(lvdisplay | grep /dev/vg02/storage)
+if [ ! "$sp" ];then
+  echo 'Ready to create neutron storage'
+  lvcreate -l 100%FREE -n storage vg02
+  mkfs -t ext4 /dev/vg02/storage
+  mount /dev/vg02/storage /storage/
+fi
+
 echo "Neutron setup is now complete!"
 

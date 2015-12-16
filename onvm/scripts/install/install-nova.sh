@@ -44,6 +44,19 @@ iniset /etc/nova/nova.conf keystone_authtoken project_name 'service'
 iniset /etc/nova/nova.conf keystone_authtoken username 'nova'
 iniset /etc/nova/nova.conf keystone_authtoken password $1
 
+iniset /etc/nova/nova.conf neutron url http://$leap_logical2physical_neutron:9696
+iniset /etc/nova/nova.conf neutron auth_url http://$leap_logical2physical_keystone:35357
+iniset /etc/nova/nova.conf neutron auth_plugin 'password'
+iniset /etc/nova/nova.conf neutron project_domain_id 'default'
+iniset /etc/nova/nova.conf neutron user_domain_id 'default'
+iniset /etc/nova/nova.conf neutron region_name 'RegionOne'
+iniset /etc/nova/nova.conf neutron project_name 'service'
+iniset /etc/nova/nova.conf neutron username 'neutron'
+iniset /etc/nova/nova.conf neutron password $1
+iniset /etc/nova/nova.conf neutron service_metadata_proxy 'True'
+iniset /etc/nova/nova.conf neutron metadata_proxy_shared_secret $1
+
+
 iniremcomment /etc/nova/nova.conf
 
 su -s /bin/sh -c "nova-manage db sync" nova
@@ -57,5 +70,13 @@ service nova-novncproxy restart
 
 rm -f /var/lib/nova/nova.sqlite
 
-echo "Nova setup is now complete!"
+mkdir -p /storage
+sp=$(lvdisplay | grep /dev/vg02/storage)
+if [ ! "$sp" ];then
+  echo 'Ready to create neutron storage'
+  lvcreate -l 100%FREE -n storage vg02
+  mkfs -t ext4 /dev/vg02/storage
+  mount /dev/vg02/storage /storage/
+fi
 
+echo "Nova setup is now complete!"

@@ -66,24 +66,24 @@ logical2physical:
   nova: nova
   heat: nova
 
-#ctlnodes:
-#  - mysqldb
-#  - rabbitmq
-#  - keystone
-#  - glance
-#  - cinder
-#  - neutron
-#  - nova
-#  - heat
-#  - horizon
+ctlnodes:
+  - mysqldb
+  - rabbitmq
+  - keystone
+  - glance
+  - cinder
+  - neutron
+  - nova
+  - heat
+  - horizon
 
 computenodes:
   - compute01
-#  - compute02
-#  - compute03
-#  - compute04
-#  - compute05
-  
+  - compute02
+  - compute03
+  - compute04
+  - compute05
+
 timezone: PST
 
 cindervg: vg02

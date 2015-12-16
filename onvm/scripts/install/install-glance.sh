@@ -31,11 +31,19 @@ iniset /etc/glance/glance-api.conf keystone_authtoken password $1
 
 iniset /etc/glance/glance-api.conf 'paste_deploy' 'flavor' 'keystone'
 
-mkdir -p /space/images
-chown glance:glance /space/images
-iniset /etc/glance/glance-api.conf 'glance_store' 'default_store' 'file'
-iniset /etc/glance/glance-api.conf 'glance_store' 'filesystem_store_datadir' '/space/images/'
+mkdir -p /storage
+sp=$(lvdisplay | grep /dev/vg02/storage)
+if [ ! "$sp" ];then
+  echo 'Ready to create glance storage'
+  lvcreate -l 100%FREE -n storage vg02
+  mkfs -t ext4 /dev/vg02/storage
+  mount /dev/vg02/storage /storage/
+  mkdir -p /storage/images
+  chown glance:glance /storage/images
+fi
 
+iniset /etc/glance/glance-api.conf 'glance_store' 'default_store' 'file'
+iniset /etc/glance/glance-api.conf 'glance_store' 'filesystem_store_datadir' '/storage/images/'
 
 iniset /etc/glance/glance-registry.conf database connection "mysql+pymysql://glance:$1@${leap_logical2physical_mysqldb}/glance"
 iniset /etc/glance/glance-registry.conf DEFAULT rpc_backend 'rabbit'

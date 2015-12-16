@@ -37,10 +37,9 @@ echo 'Setting up hostname'
 echo -e "$1" > target/etc/hostname
 echo 
 
-umount source
-umount target
+umount source/
+umount target/
 
 lvconvert --merge /dev/vg00/resetpoint
 
-reboot
-exit
+

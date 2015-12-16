@@ -147,4 +147,13 @@ openstack role create heat_stack_owner
 openstack role add --project demo --user demo heat_stack_owner
 openstack role create heat_stack_user
 
+mkdir -p /storage
+sp=$(lvdisplay | grep /dev/vg02/storage)
+if [ ! "$sp" ];then
+  echo 'Ready to create keystone storage'
+  lvcreate -l 100%FREE -n storage vg02
+  mkfs -t ext4 /dev/vg02/storage
+  mount /dev/vg02/storage /storage/
+fi
+
 echo "Keystone setup is now complete!"
