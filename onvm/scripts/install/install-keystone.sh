@@ -10,13 +10,13 @@ echo "manual" > /etc/init/keystone.override
 
 apt-get install -qqy keystone apache2 libapache2-mod-wsgi memcached python-memcache
 
-echo "Keyston packages are installed!"
+echo "Keystone packages are installed!"
 
 iniset /etc/keystone/keystone.conf DEFAULT admin_token $1
 iniset /etc/keystone/keystone.conf DEFAULT rpc_backend rabbit
 iniset /etc/keystone/keystone.conf DEFAULT debug "True"
 
-iniset /etc/keystone/keystone.conf database connection "mysql+pymysql://keystone:$1@${leap_logical2physical_keystone}/keystone"
+iniset /etc/keystone/keystone.conf database connection mysql+pymysql://keystone:$1@$leap_logical2physical_mysqldb/keystone
 iniset /etc/keystone/keystone.conf memcache servers "localhost:11211"
 iniset /etc/keystone/keystone.conf token provider uuid
 iniset /etc/keystone/keystone.conf token driver memcache
@@ -45,7 +45,7 @@ wait
 echo "Ready to create endpoints"
 
 export OS_TOKEN=$1
-export OS_URL=http://"${leap_logical2physical_keystone}":35357/v3
+export OS_URL=http://$leap_logical2physical_keystone:35357/v3
 export OS_IDENTITY_API_VERSION=3
 
 openstack service create --name keystone --description "OpenStack Identity" identity
