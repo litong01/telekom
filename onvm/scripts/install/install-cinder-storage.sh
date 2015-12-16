@@ -37,7 +37,7 @@ iniset /etc/cinder/cinder.conf keystone_authtoken password $1
 
 
 iniset /etc/cinder/cinder.conf lvm volume_driver 'cinder.volume.drivers.lvm.LVMVolumeDriver'
-iniset /etc/cinder/cinder.conf lvm volume_group "$vgname"
+iniset /etc/cinder/cinder.conf lvm volume_group $leap_cindervg
 iniset /etc/cinder/cinder.conf lvm iscsi_protocol 'iscsi'
 iniset /etc/cinder/cinder.conf lvm iscsi_helper 'tgtadm'
 

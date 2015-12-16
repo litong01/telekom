@@ -11,7 +11,7 @@ apt-get install -qqy nova-api nova-cert nova-conductor nova-consoleauth \
 
 echo "Nova packages are installed!"
 
-iniset /etc/nova/nova.conf database connection "mysql+pymysql://nova:$1@${leap_logical2physical_mysqldb}/nova"
+iniset /etc/nova/nova.conf database connection mysql+pymysql://nova:$1@$leap_logical2physical_mysqldb/nova
 iniset /etc/nova/nova.conf DEFAULT rpc_backend 'rabbit'
 iniset /etc/nova/nova.conf DEFAULT debug 'True'
 iniset /etc/nova/nova.conf DEFAULT auth_strategy 'keystone'
@@ -26,7 +26,7 @@ iniset /etc/nova/nova.conf DEFAULT firewall_driver 'nova.virt.firewall.NoopFirew
 iniset /etc/nova/nova.conf vnc vncserver_listen '$my_ip'
 iniset /etc/nova/nova.conf vnc vncserver_proxyclient_address '$my_ip'
 
-iniset /etc/nova/nova.conf glance host 'glance'
+iniset /etc/nova/nova.conf glance host $leap_logical2physical_glance
 
 iniset /etc/nova/nova.conf oslo_concurrency lock_path '/var/lib/nova/tmp'
 
@@ -35,8 +35,8 @@ iniset /etc/nova/nova.conf oslo_messaging_rabbit rabbit_userid openstack
 iniset /etc/nova/nova.conf oslo_messaging_rabbit rabbit_password $1
 
 
-iniset /etc/nova/nova.conf keystone_authtoken auth_uri "http://${leap_logical2physical_keystone}:5000"
-iniset /etc/nova/nova.conf keystone_authtoken auth_url "http://${leap_logical2physical_keystone}:35357"
+iniset /etc/nova/nova.conf keystone_authtoken auth_uri http://$leap_logical2physical_keystone:5000
+iniset /etc/nova/nova.conf keystone_authtoken auth_url http://$leap_logical2physical_keystone:35357
 iniset /etc/nova/nova.conf keystone_authtoken auth_plugin 'password'
 iniset /etc/nova/nova.conf keystone_authtoken project_domain_id 'default'
 iniset /etc/nova/nova.conf keystone_authtoken user_domain_id 'default'
