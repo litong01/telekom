@@ -52,13 +52,13 @@ Vagrant.configure("2") do |config|
           managed.server = nodes[key]['eth0']
         end
 
-        node.vm.provision "compute-install", type: "shell" do |s|
+        node.vm.provision "#{key}-install", type: "shell" do |s|
           s.path = "onvm/scripts/install/install-compute.sh"
           s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
         end
 
         # we will isntall cinder storage on each compute node as well
-        node.vm.provision "cinder-storage-install", type: "shell" do |s|
+        node.vm.provision "#{key}-storage-install", type: "shell" do |s|
           s.path = "onvm/scripts/install/install-cinder-storage.sh"
           s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
         end

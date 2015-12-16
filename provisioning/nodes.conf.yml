@@ -1,8 +1,8 @@
 ---
 mysqldb:
   host_name: mysqldb.leap.dev
-  eth0: 9.30.107.133
-  eth1: 192.168.1.133
+  eth0: 9.30.107.132
+  eth1: 192.168.1.132
 
 keystone:
   host_name: keystone.leap.dev
@@ -56,33 +56,33 @@ public_net:
   gateway: 9.30.107.129
 
 logical2physical:
-    mysqldb: mysqldb
-    keystone: keystone
-    rabbitmq: keystone
-    horizon: keystone
-    glance: glance
-    cinder: glance
-    neutron: neutron
-    nova: nova
-    heat: nova
+  mysqldb: mysqldb
+  keystone: keystone
+  rabbitmq: keystone
+  horizon: keystone
+  glance: glance
+  cinder: glance
+  neutron: neutron
+  nova: nova
+  heat: nova
 
 ctlnodes:
-    - mysqldb
-    - rabbitmq
-    - keystone
-    - glance
-    - cinder
-    - neutron
-    - nova
-    - heat
-    - horizon
+  - mysqldb
+  - rabbitmq
+  - keystone
+  - glance
+  - cinder
+  - neutron
+  - nova
+  - heat
+  - horizon
 
 computenodes:
-    - compute01
-    - compute02
-    - compute03
-    - compute04
-    - compute05
+  - compute01
+  - compute02
+  - compute03
+  - compute04
+  - compute05
   
 timezone: PST
 
