@@ -3,10 +3,20 @@
 
 require 'yaml'
 
-env = ".dev"
+if ENV["LEAP"] == 'DEVELOPMENT'
+    FileUtils.cp("provisioning/nodes.dev.conf.yml",
+        "onvm/conf/nodes.conf.yml")
+    FileUtils.cp("provisioning/ids.dev.conf.yml",
+        "onvm/conf/ids.conf.yml")
+elsif ENV["LEAP"] == 'PRODUCTION'
+    FileUtils.cp("provisioning/nodes.conf.yml",
+        "onvm/conf/nodes.conf.yml")
+    FileUtils.cp("provisioning/ids.conf.yml",
+        "onvm/conf/ids.conf.yml")
+end
 
-nodes = YAML.load_file("provisioning/nodes" + env + ".conf.yml")
-ids = YAML.load_file("provisioning/ids" + env + ".conf.yml")
+nodes = YAML.load_file("onvm/conf/nodes.conf.yml")
+ids = YAML.load_file("onvm/conf/ids.conf.yml")
 
 Vagrant.configure("2") do |config|
   config.vm.box = "tknerr/managed-server-dummy"
@@ -15,41 +25,43 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder "onvm", "/onvm", disabled: false, create: true
-  config.vm.provision "file", source: "provisioning/nodes" + env + ".conf.yml",
-    destination: "/onvm/conf/nodes.conf.yml"
 
   lnodes = nodes['ctlnodes']
-  lnodes.each do |key|
-    config.vm.define "#{key}" do |node|
-      nodekey = nodes['logical2physical'][key]
-      node.vm.provider :managed do |managed|
-        managed.server = nodes[nodekey]['eth0']
-      end
+  if lnodes
+    lnodes.each do |key|
+      config.vm.define "#{key}" do |node|
+        nodekey = nodes['logical2physical'][key]
+        node.vm.provider :managed do |managed|
+          managed.server = nodes[nodekey]['eth0']
+        end
 
-      node.vm.provision "#{key}-install", type: "shell" do |s|
-        s.path = "onvm/scripts/install/install-" + key + ".sh"
-        s.args = ids['sys_password'] + ' ' + nodes[nodekey]['eth0'] + ' ' + nodes[nodekey]['eth1']
+        node.vm.provision "#{key}-install", type: "shell" do |s|
+          s.path = "onvm/scripts/install/install-" + key + ".sh"
+          s.args = ids['sys_password'] + ' ' + nodes[nodekey]['eth0'] + ' ' + nodes[nodekey]['eth1']
+        end
       end
     end
   end
 
   # compute node setup
   lnodes = nodes['computenodes']
-  lnodes.each do |key|
-    config.vm.define "#{key}" do |node|
-      node.vm.provider :managed do |managed|
-        managed.server = nodes[key]['eth0']
-      end
+  if lnodes
+    lnodes.each do |key|
+      config.vm.define "#{key}" do |node|
+        node.vm.provider :managed do |managed|
+          managed.server = nodes[key]['eth0']
+        end
 
-      node.vm.provision "compute-install", type: "shell" do |s|
-        s.path = "onvm/scripts/install/install-compute.sh"
-        s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
-      end
+        node.vm.provision "compute-install", type: "shell" do |s|
+          s.path = "onvm/scripts/install/install-compute.sh"
+          s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
+        end
 
-      # we will isntall cinder storage on each compute node as well
-      node.vm.provision "cinder-storage-install", type: "shell" do |s|
-        s.path = "onvm/scripts/install/install-cinder-storage.sh"
-        s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
+        # we will isntall cinder storage on each compute node as well
+        node.vm.provision "cinder-storage-install", type: "shell" do |s|
+          s.path = "onvm/scripts/install/install-cinder-storage.sh"
+          s.args = ids['sys_password'] + " " + nodes[key]['eth0'] + " " + nodes[key]['eth1']
+        end
       end
     end
   end
