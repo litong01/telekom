@@ -1,4 +1,7 @@
 .vagrant/*
 /provisioning/ids*.conf.yml
+/onvm/conf/nodes.conf.yml
+/onvm/conf/ids.conf.yml
+/onvm/conf/hosts
 *.out
 *.log

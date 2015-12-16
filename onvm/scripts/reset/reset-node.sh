@@ -1,48 +1,46 @@
 #!/usr/bin/env bash
+# $1 hostname
+# $2 public ip eth0
+# $3 public ip eth1
 
+dir=`mktemp -d` && cd $dir
+mkdir source target
 
-vgname=$(vgdisplay | awk 'NR==2 { print $3 }')
-echo $vgname
+mount /dev/vg01/space source
 
-mount /dev/$vgname/space /space
-
-sp=$(lvdisplay | grep resetpoint)
+sp=$(lvdisplay | grep /dev/vg00/resetpoint)
 if [ "$sp" ];then
    echo 'Ready to remove older resetpoint'
-   lvremove -f "/dev/${vgname}/resetpoint"
+   lvremove -f "/dev/vg00/resetpoint"
 fi
 
-rm -r -f /space/snap/*
-lvcreate --size 20G -s -n resetpoint /dev/$vgname/root
-mount /dev/$vgname/resetpoint /space/snap
-cd /space/snap
-rm -r -f *
-tar -xf /space/backup/cleansystem.tar.gz
-cd ~
+lvcreate --size 6G -s -n resetpoint /dev/vg00/vg00-lv01
+
+mount /dev/vg00/resetpoint target
+
+rm -r -f target/*
+cd target
+tar -xf ../source/cleansystem.tar.gz
+cd $dir
 
 echo "Setting up eth1..."
-echo -e "\nauto eth1" >> /space/snap/etc/network/interfaces
-echo -e "iface eth1 inet static" >> /space/snap/etc/network/interfaces
-echo -e "  address $1" >> /space/snap/etc/network/interfaces
-echo -e "  netmask 255.255.255.0" >> /space/snap/etc/network/interfaces
+echo -e "\nauto eth1" >> target/etc/network/interfaces
+echo -e "iface eth1 inet static" >> target/etc/network/interfaces
+echo -e "  address $3" >> target/etc/network/interfaces
+echo -e "  netmask 255.255.255.0" >> target/etc/network/interfaces
 
-echo -e "" >> /space/snap/etc/hosts
-#echo -e "192.168.1.132 mysqldb" >> /space/snap/etc/hosts
-echo -e "192.168.1.133 mysqldb keystone horizon rabbitmq" >> /space/snap/etc/hosts
-echo -e "192.168.1.134 glance cinder" >> /space/snap/etc/hosts
-echo -e "192.168.1.135 neutron" >> /space/snap/etc/hosts
-echo -e "192.168.1.136 nova heat" >> /space/snap/etc/hosts
-echo -e "192.168.1.137 compute01" >> /space/snap/etc/hosts
-echo -e "192.168.1.138 compute02" >> /space/snap/etc/hosts
-echo -e "192.168.1.139 compute03" >> /space/snap/etc/hosts
-echo -e "192.168.1.140 compute04" >> /space/snap/etc/hosts
-echo -e "192.168.1.141 compute05" >> /space/snap/etc/hosts
+echo 'Processing /etc/hosts'
+sed -i '/^127.0.1.1/d' target/etc/hosts
+cat /onvm/conf/hosts >> target/etc/hosts
 
-umount /space/snap
-lvconvert --merge /dev/$vgname/resetpoint
-#cd /boot
-#rm -r -f *
-#tar -xf /space/backup/boot.tar.gz
+echo 'Setting up hostname'
+echo -e "$1" > target/etc/hostname
+echo 
+
+umount source
+umount target
+
+lvconvert --merge /dev/vg00/resetpoint
 
 reboot
 exit

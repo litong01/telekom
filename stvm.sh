@@ -1,2 +1,2 @@
-vboxmanage controlvm LVMBoot acpipowerbutton
-vboxmanage controlvm vagrantcontrol acpipowerbutton
+vboxmanage controlvm h1 acpipowerbutton
+vboxmanage controlvm h2 acpipowerbutton

@@ -1,12 +1,12 @@
 ---
 controller:
   host_name: controller.leap.dev
-  eth0: 192.168.1.75
+  eth0: 192.168.1.88
   eth1: 192.168.15.8
 
 compute01:
   host_name: compute01.leap.dev
-  eth0: 192.168.1.76
+  eth0: 192.168.1.90
   eth1: 192.168.15.9
 
 public_net:
@@ -37,10 +37,10 @@ ctlnodes:
   - heat
   - horizon
 
-computenodes:
-  - compute01
+#computenodes:
+#  - compute01
 
 timezone: EST
 
-cindervg: rootvg
+cindervg: vg02
 

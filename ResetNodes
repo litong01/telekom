@@ -2,9 +2,23 @@
 # vi: set ft=ruby :
 
 require 'yaml'
+require 'fileutils'
 
-nodes = YAML.load_file("provisioning/nodes.dev.conf.yml")
-ids = YAML.load_file("provisioning/ids.conf.yml")
+
+if ENV["LEAP"] == 'DEVELOPMENT'
+    FileUtils.cp("provisioning/nodes.dev.conf.yml",
+        "onvm/conf/nodes.conf.yml")
+    FileUtils.cp("provisioning/ids.dev.conf.yml",
+        "onvm/conf/ids.conf.yml")
+elsif ENV["LEAP"] == 'PRODUCTION'
+    FileUtils.cp("provisioning/nodes.conf.yml",
+        "onvm/conf/nodes.conf.yml")
+    FileUtils.cp("provisioning/ids.conf.yml",
+        "onvm/conf/ids.conf.yml")
+end
+
+nodes = YAML.load_file("onvm/conf/nodes.conf.yml")
+ids = YAML.load_file("onvm/conf/ids.conf.yml")
 
 Vagrant.configure("2") do |config|
   config.vm.box = "tknerr/managed-server-dummy"
@@ -14,26 +28,44 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder "onvm", "/onvm", disabled: false, create: true
 
-  nodes.each do |key, value|
-    if ['compute01'].include?(key) == true then
-      config.vm.define "#{key}" do |node|
-        node.vm.provider :managed do |managed|
-          managed.server = nodes[key]['eth0']
-        end
+  pnodes = {}
+  if nodes['ctlnodes']
+    nodes['ctlnodes'].each do |key|
+       pnodes[nodes['logical2physical'][key]] = {}
+    end
+  end
 
-        node.vm.provision "save", type: "shell" do |s|
-          s.path = "onvm/scripts/reset/save-node.sh"
-          s.args = nodes[key]['eth1']
-        end
+  if nodes['computenodes']
+    nodes['computenodes'].each do |key|
+      pnodes[key] = {}
+    end
+  end
 
-        node.vm.provision "reset", type: "shell" do |s|
-          s.path = "onvm/scripts/reset/reset-node.sh"
-          s.args = nodes[key]['eth1']
-        end
+  open("onvm/conf/hosts", 'w') do | file |
+     file.puts "\n"
+     pnodes.keys.each do |key|
+        file.puts nodes[key]['eth1'] + "\t" + key
+     end
+  end
 
-        node.vm.provision "install-common", type: "shell" do |s|
-          s.path = "onvm/scripts/reset/install-common.sh"
-        end
+  pnodes.keys.each do |key|
+    config.vm.define "#{key}" do |node|
+      node.vm.provider :managed do |managed|
+        managed.server = nodes[key]['eth0']
+      end
+
+      node.vm.provision "save", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/save-node.sh"
+        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
+      end
+
+      node.vm.provision "reset", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/reset-node.sh"
+        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
+      end
+
+      node.vm.provision "install-common", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/install-common.sh"
       end
     end
   end
