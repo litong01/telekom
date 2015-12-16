@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 # $1 sys_password
-# $2 management network ip
+# $2 public ip eth0
+# $3 private ip eth1
 
 source /onvm/scripts/ini-config
+eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 apt-get -qqy install openstack-dashboard
 
-sed -i -e 's/^OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"keystone\"/g' /etc/openstack-dashboard/local_settings.py
+cmdStr=$(echo 's/^OPENSTACK_HOST = "127.0.0.1"/OPENSTACK_HOST = "'$leap_logical2physical_keystone'"/g')
+
+sed -i -e "${cmdStr}" /etc/openstack-dashboard/local_settings.py
 sed -i -e 's/^OPENSTACK_KEYSTONE_DEFAULT_ROLE = "_member_"/OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"/g' /etc/openstack-dashboard/local_settings.py
-sed -i -e 's/^TIME_ZONE = "UTC"/TIME_ZONE = "EST"/g' /etc/openstack-dashboard/local_settings.py
+
+cmdStr=$(echo 's/^TIME_ZONE = "UTC"/TIME_ZONE = "'$leap_timezone'"/g')
+sed -i -e "${cmdStr}" /etc/openstack-dashboard/local_settings.py
 
 sed -i -e "s/^ALLOWED_HOSTS = '\*'/ALLOWED_HOSTS = ['*', ]/" /etc/openstack-dashboard/local_settings.py
 

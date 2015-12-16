@@ -1,2 +1,4 @@
 .vagrant/*
-/provisioning/ids.conf.yml
+/provisioning/ids*.conf.yml
+*.out
+*.log

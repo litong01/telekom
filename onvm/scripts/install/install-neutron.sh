@@ -4,6 +4,7 @@
 # $3 private ip eth1
 
 source /onvm/scripts/ini-config
+eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 apt-get install -qqy neutron-server neutron-plugin-ml2 \
   neutron-plugin-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent \
@@ -15,19 +16,19 @@ echo "Neutron packages are installed!"
 # Configre /etc/neutron/neutron.conf
 echo "Configure the server component"
 
-iniset /etc/neutron/neutron.conf database connection "mysql+pymysql://neutron:$1@mysqldb/neutron"
+iniset /etc/neutron/neutron.conf database connection "mysql+pymysql://neutron:$1@${leap_logical2physical_mysqldb}/neutron"
 iniset /etc/neutron/neutron.conf DEFAULT core_plugin 'ml2'
 iniset /etc/neutron/neutron.conf DEFAULT service_plugins 'router'
 iniset /etc/neutron/neutron.conf DEFAULT allow_overlapping_ips 'True'
 iniset /etc/neutron/neutron.conf DEFAULT rpc_backend 'rabbit'
-iniset /etc/neutron/neutron.conf DEFAULT verbose 'True'
-iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_host 'rabbitmq'
+iniset /etc/neutron/neutron.conf DEFAULT debug 'True'
+iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_host "${leap_logical2physical_rabbitmq}"
 iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_userid 'openstack'
 iniset /etc/neutron/neutron.conf oslo_messaging_rabbit rabbit_password $1
 iniset /etc/neutron/neutron.conf DEFAULT auth_strategy 'keystone'
 
-iniset /etc/neutron/neutron.conf keystone_authtoken auth_uri 'http://keystone:5000'
-iniset /etc/neutron/neutron.conf keystone_authtoken auth_url 'http://keystone:35357'
+iniset /etc/neutron/neutron.conf keystone_authtoken auth_uri "http://${leap_logical2physical_keystone}:5000"
+iniset /etc/neutron/neutron.conf keystone_authtoken auth_url "http://${leap_logical2physical_keystone}:35357"
 iniset /etc/neutron/neutron.conf keystone_authtoken auth_plugin 'password'
 iniset /etc/neutron/neutron.conf keystone_authtoken project_domain_id 'default'
 iniset /etc/neutron/neutron.conf keystone_authtoken user_domain_id 'default'
@@ -42,9 +43,9 @@ inidelete /etc/neutron/neutron.conf keystone_authtoken admin_password
 
 iniset /etc/neutron/neutron.conf DEFAULT notify_nova_on_port_status_changes 'True'
 iniset /etc/neutron/neutron.conf DEFAULT notify_nova_on_port_data_changes 'True'
-iniset /etc/neutron/neutron.conf DEFAULT nova_url 'http://nova:8774/v2'
+iniset /etc/neutron/neutron.conf DEFAULT nova_url "http://${leap_logical2physical_nova}:8774/v2"
 
-iniset /etc/neutron/neutron.conf nova auth_url 'http://keystone:35357'
+iniset /etc/neutron/neutron.conf nova auth_url "http://${leap_logical2physical_keystone}:35357"
 iniset /etc/neutron/neutron.conf nova auth_plugin 'password'
 iniset /etc/neutron/neutron.conf nova project_domain_id 'default'
 iniset /etc/neutron/neutron.conf nova user_domain_id 'default'
@@ -81,7 +82,7 @@ echo "Configure the layer-3 agent"
 
 iniset /etc/neutron/l3_agent.ini DEFAULT interface_driver  'neutron.agent.linux.interface.BridgeInterfaceDriver'
 iniset /etc/neutron/l3_agent.ini DEFAULT external_network_bridge ''
-iniset /etc/neutron/l3_agent.ini DEFAULT verbose 'True'
+iniset /etc/neutron/l3_agent.ini DEFAULT debug 'True'
 
 
 # Configure /etc/neutron/dhcp_agent.ini
@@ -96,8 +97,8 @@ echo 'dhcp-option-force=26,1450' > /etc/neutron/dnsmasq-neutron.conf
 #Configure /etc/neutron/metadata_agent.ini
 echo "Configure the metadata agent"
 
-iniset /etc/neutron/metadata_agent.ini DEFAULT auth_uri 'http://keystone:5000'
-iniset /etc/neutron/metadata_agent.ini DEFAULT auth_url 'http://keystone:35357'
+iniset /etc/neutron/metadata_agent.ini DEFAULT auth_uri "http://${leap_logical2physical_keystone}:5000"
+iniset /etc/neutron/metadata_agent.ini DEFAULT auth_url "http://${leap_logical2physical_keystone}:35357"
 iniset /etc/neutron/metadata_agent.ini DEFAULT auth_region 'RegionOne'
 iniset /etc/neutron/metadata_agent.ini DEFAULT auth_plugin 'password'
 iniset /etc/neutron/metadata_agent.ini DEFAULT project_domain_id 'default'
@@ -105,9 +106,9 @@ iniset /etc/neutron/metadata_agent.ini DEFAULT user_domain_id 'default'
 iniset /etc/neutron/metadata_agent.ini DEFAULT project_name 'service'
 iniset /etc/neutron/metadata_agent.ini DEFAULT username 'neutron'
 iniset /etc/neutron/metadata_agent.ini DEFAULT password $1
-iniset /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip 'neutron'
+iniset /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip "${leap_logical2physical_neutron}"
 iniset /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret $1
-iniset /etc/neutron/metadata_agent.ini DEFAULT verbose 'True'
+iniset /etc/neutron/metadata_agent.ini DEFAULT debug 'True'
 
 # clean up configuration files
 

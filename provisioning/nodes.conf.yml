@@ -9,18 +9,8 @@ keystone:
   eth0: 9.30.107.133
   eth1: 192.168.1.133
 
-horizon:
-  host_name: horizon.leap.dev
-  eth0: 9.30.107.133
-  eth1: 192.168.1.133
-
 glance:
   host_name: glance.leap.dev
-  eth0: 9.30.107.134
-  eth1: 192.168.1.134
-
-cinder:
-  host_name: cinder.leap.dev
   eth0: 9.30.107.134
   eth1: 192.168.1.134
 
@@ -31,11 +21,6 @@ neutron:
 
 nova:
   host_name: nova.leap.dev
-  eth0: 9.30.107.136
-  eth1: 192.168.1.136
-
-heat:
-  host_name: heat.leap.dev
   eth0: 9.30.107.136
   eth1: 192.168.1.136
 
@@ -63,3 +48,39 @@ compute05:
   host_name: compute05.leap.dev
   eth0: 9.30.107.141
   eth1: 192.168.1.141
+
+public_net:
+  id: 9.30.107.128/26
+  start_ip: 9.30.107.152
+  end_ip: 9.30.107.184
+  gateway: 9.30.107.129
+
+logical2physical:
+    mysqldb: mysqldb
+    keystone: keystone
+    rabbitmq: keystone
+    horizon: keystone
+    glance: glance
+    cinder: glance
+    neutron: neutron
+    nova: nova
+    heat: nova
+
+ctlnodes:
+    - mysqldb
+    - rabbitmq
+    - keystone
+    - glance
+    - cinder
+    - neutron
+    - nova
+    - heat
+    - horizon
+
+computenodes:
+    - compute01
+    - compute02
+    - compute03
+    - compute04
+    - compute05
+  

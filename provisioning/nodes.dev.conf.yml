@@ -1,46 +1,45 @@
 ---
-mysqldb:
-  host_name: mysqldb.leap.dev
+controller:
+  host_name: controller.leap.dev
   eth0: 192.168.1.75
   eth1: 192.168.15.8
-
-keystone:
-  host_name: keystone.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.8
-
-horizon:
-  host_name: horizon.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.8
-
-glance:
-  host_name: glance.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.8
-
-cinder:
-  host_name: cinder.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.8
-
-neutron:
-  host_name: neutron.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.85
-
-nova:
-  host_name: nova.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.86
-
-heat:
-  host_name: heat.leap.dev
-  eth0: 192.168.1.75
-  eth1: 192.168.15.86
 
 compute01:
   host_name: compute01.leap.dev
   eth0: 192.168.1.76
   eth1: 192.168.15.9
+
+public_net:
+  id: 192.168.1.0/24
+  start_ip: 192.168.1.210
+  end_ip: 192.168.1.219
+  gateway: 192.168.1.1
+
+logical2physical:
+  mysqldb: controller
+  keystone: controller
+  rabbitmq: controller
+  horizon: controller
+  glance: controller
+  cinder: controller
+  neutron: controller
+  nova: controller
+  heat: controller
+
+ctlnodes:
+  - mysqldb
+  - rabbitmq
+  - keystone
+  - glance
+  - cinder
+  - neutron
+  - nova
+  - heat
+  - horizon
+
+computenodes:
+  - compute01
+
+timezone: EST
+
 
