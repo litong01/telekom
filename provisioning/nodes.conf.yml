@@ -88,3 +88,5 @@ timezone: PST
 
 cindervg: vg02
 
+ntpserver: mysqldb
+

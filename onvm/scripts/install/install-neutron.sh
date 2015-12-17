@@ -110,6 +110,10 @@ iniset /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip "${leap_logical2
 iniset /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret $1
 iniset /etc/neutron/metadata_agent.ini DEFAULT debug 'True'
 
+inidelete /etc/neutron/metadata_agent.ini DEFAULT admin_tenant_name
+inidelete /etc/neutron/metadata_agent.ini DEFAULT admin_user
+inidelete /etc/neutron/metadata_agent.ini DEFAULT admin_password
+
 # clean up configuration files
 
 iniremcomment /etc/neutron/neutron.conf

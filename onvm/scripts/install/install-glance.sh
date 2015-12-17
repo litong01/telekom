@@ -38,9 +38,11 @@ if [ ! "$sp" ];then
   lvcreate -l 100%FREE -n storage vg02
   mkfs -t ext4 /dev/vg02/storage
   mount /dev/vg02/storage /storage/
-  mkdir -p /storage/images
-  chown glance:glance /storage/images
 fi
+
+mkdir -p /storage/images
+chown glance:glance /storage/images
+
 
 iniset /etc/glance/glance-api.conf 'glance_store' 'default_store' 'file'
 iniset /etc/glance/glance-api.conf 'glance_store' 'filesystem_store_datadir' '/storage/images/'

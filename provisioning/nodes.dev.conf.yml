@@ -44,3 +44,5 @@ timezone: EST
 
 cindervg: vg02
 
+ntpserver: mysqldb
+
