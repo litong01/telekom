@@ -42,4 +42,5 @@ umount target/
 
 lvconvert --merge /dev/vg00/resetpoint
 
+shutdown -r +1 &
 

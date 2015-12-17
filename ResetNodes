@@ -68,6 +68,10 @@ Vagrant.configure("2") do |config|
         s.path = "onvm/scripts/reset/install-common.sh"
         s.args = key + ' ' + nodes['logical2physical'][nodes['ntpserver']]
       end
+
+      node.vm.provision "reboot", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/bootnode.sh"
+      end
     end
   end
 
