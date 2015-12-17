@@ -84,7 +84,7 @@ computenodes:
   - compute04
   - compute05
 
-timezone: PST
+timezone: America/Los_Angeles
 
 cindervg: vg02
 
