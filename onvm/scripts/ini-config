@@ -204,6 +204,31 @@ $option = $value
     $xtrace
 }
 
+# Set an option in a conf file
+# confset [-sudo] config-file option value
+#  - if the file does not exist, it is created
+function confset {
+    local xtrace
+    xtrace=$(set +o | grep xtrace)
+    set +o xtrace
+    local sudo=""
+    if [ $1 == "-sudo" ]; then
+        sudo="sudo "
+        shift
+    fi
+    local file=$1
+    local option=$2
+    local value=$3
+
+    if ! grep -q "^$option" "$file" 2>/dev/null; then
+      echo -e "\n$option = $value\n" | $sudo tee --append "$file" > /dev/null
+    else
+      $sudo sed -i -e 's/^'$option'.*$/'$option' = '$value'/g' $file
+    fi
+
+    $xtrace
+}
+
 # Set a multiple line option in an INI file
 # iniset_multiline [-sudo] config-file section option value1 value2 value3 ...
 function iniset_multiline {

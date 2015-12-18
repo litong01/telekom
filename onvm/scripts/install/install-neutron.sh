@@ -57,14 +57,18 @@ iniset /etc/neutron/neutron.conf nova password $1
 # Configure /etc/neutron/plugins/ml2/ml2_conf.ini
 echo "Configure Modular Layer 2 (ML2) plug-in"
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers 'flat,vlan,vxlan'
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types 'vxlan'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers 'flat,vlan'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types 'vlan'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers 'linuxbridge,l2population'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers 'port_security'
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_flat flat_networks 'public'
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vni_ranges '1:1000'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vlan network_vlan_ranges '101:200'
+
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
+
 
 # Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "COnfigure linuxbridge agent"
