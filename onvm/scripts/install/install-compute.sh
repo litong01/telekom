@@ -73,6 +73,14 @@ fi
 # Configure neutron on compute node /etc/neutron/neutron.conf
 echo 'Configure neutron on compute node'
 
+
+confset /etc/sysctl.conf net.ipv4.conf.default.rp_filter 0
+confset /etc/sysctl.conf net.ipv4.conf.all.rp_filter 0
+confset /etc/sysctl.conf net.bridge.bridge-nf-call-iptables 1
+confset /etc/sysctl.conf net.bridge.bridge-nf-call-ip6tables 1
+
+sysctl -p
+
 iniset /etc/neutron/neutron.conf DEFAULT rpc_backend 'rabbit'
 iniset /etc/neutron/neutron.conf DEFAULT auth_strategy 'keystone'
 iniset /etc/neutron/neutron.conf DEFAULT debug 'True'
@@ -92,13 +100,14 @@ iniset /etc/neutron/neutron.conf keystone_authtoken password $1
 # Configure the Linux bridge agent /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "Configure the Linux bridge agent!"
 
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth0'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan local_ip $3
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan l2_population 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent prevent_arp_spoofing 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup enable_security_group 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup firewall_driver 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'vlan:eth1'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini vxlan enable_vxlan 'False'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini vxlan local_ip $3
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini vxlan l2_population 'True'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini agent prevent_arp_spoofing 'True'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
 
 
 iniremcomment /etc/nova/nova.conf
