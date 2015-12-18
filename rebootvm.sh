@@ -1,5 +1,5 @@
-VBoxManage snapshot h1 restore "Snapshot 1"
-VBoxManage snapshot h2 restore "Snapshot 1"
+VBoxManage snapshot h1-90 restore "Snapshot 2"
+VBoxManage snapshot h2-88 restore "Snapshot 2"
 
-vboxmanage startvm h1 --type headless
-vboxmanage startvm h2 --type headless
+vboxmanage startvm h1-90 --type headless
+vboxmanage startvm h2-88 --type headless
