@@ -63,13 +63,13 @@ iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers 'linuxbridge,
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers 'port_security'
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_flat flat_networks 'public'
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vlan network_vlan_ranges 'vlan:101:200'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'vlan:eth1,public:eth2'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'public:eth2,vlan:eth1'
 
 # Configure the kernel to enable packet forwarding and disable reverse path filting
 echo 'Configure the kernel to enable packet forwarding and disable reverse path filting'
@@ -84,10 +84,12 @@ sysctl -p
 # Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "COnfigure linuxbridge agent"
 
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth2'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth2,vlan:eth1'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
+
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'False'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan local_ip $3
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan l2_population 'True'
+#iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan local_ip $3
+#iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan l2_population 'True'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent prevent_arp_spoofing 'True'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup firewall_driver 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
