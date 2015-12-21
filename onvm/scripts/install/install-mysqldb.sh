@@ -39,4 +39,5 @@ if [ ! "$sp" ];then
   lvcreate -l 100%FREE -n storage vg02
   mkfs -t ext4 /dev/vg02/storage
   mount /dev/vg02/storage /storage/
+  echo '/dev/vg02/storage    /storage    ext4    default    0    2' >> /etc/fstab
 fi

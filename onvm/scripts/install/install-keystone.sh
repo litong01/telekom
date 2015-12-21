@@ -85,11 +85,11 @@ echo "export OS_PASSWORD=$1" >> ~/demo-openrc.sh
 echo "export OS_AUTH_URL=http://${leap_logical2physical_keystone}:5000/v3" >> ~/demo-openrc.sh
 echo "export OS_IDENTITY_API_VERSION=3" >> ~/demo-openrc.sh
 
-#for key in 'pipeline:public_api' 'pipeline:admin_api' 'pipeline:api_v3'; do
-#  val1=$(iniget /etc/keystone/keystone-paste.ini $key pipeline)
-#  val1=${val1/admin_token_auth/}
-#  iniset /etc/keystone/keystone-paste.ini $key pipeline "$val1"
-#done
+for key in 'pipeline:public_api' 'pipeline:admin_api' 'pipeline:api_v3'; do
+  val1=$(iniget /etc/keystone/keystone-paste.ini $key pipeline)
+  val1=${val1/admin_token_auth/}
+  iniset /etc/keystone/keystone-paste.ini $key pipeline "$val1"
+done
 
 
 unset OS_TOKEN
@@ -154,6 +154,7 @@ if [ ! "$sp" ];then
   lvcreate -l 100%FREE -n storage vg02
   mkfs -t ext4 /dev/vg02/storage
   mount /dev/vg02/storage /storage/
+  echo '/dev/vg02/storage    /storage    ext4    default    0    2' >> /etc/fstab
 fi
 
 echo "Keystone setup is now complete!"
