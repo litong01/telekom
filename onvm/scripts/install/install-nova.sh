@@ -73,11 +73,16 @@ rm -f /var/lib/nova/nova.sqlite
 mkdir -p /storage
 sp=$(lvdisplay | grep /dev/vg02/storage)
 if [ ! "$sp" ];then
-  echo 'Ready to create neutron storage'
+  echo 'Ready to create storage'
   lvcreate -l 100%FREE -n storage vg02
   mkfs -t ext4 /dev/vg02/storage
+fi
+
+sp=$(mount | grep /storage)
+if [ ! "$sp" ]; then
   mount /dev/vg02/storage /storage/
   echo '/dev/vg02/storage    /storage    ext4    default    0    2' >> /etc/fstab
 fi
+
 
 echo "Nova setup is now complete!"

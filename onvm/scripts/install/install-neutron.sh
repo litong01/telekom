@@ -69,7 +69,7 @@ iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutr
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'public:eth2,vlan:eth1'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'public:eth0,vlan:eth1'
 
 # Configure the kernel to enable packet forwarding and disable reverse path filting
 echo 'Configure the kernel to enable packet forwarding and disable reverse path filting'
@@ -84,7 +84,7 @@ sysctl -p
 # Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "COnfigure linuxbridge agent"
 
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth2,vlan:eth1'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth0,vlan:eth1'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
 
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'False'
@@ -159,9 +159,13 @@ rm -f /var/lib/neutron/neutron.sqlite
 mkdir -p /storage
 sp=$(lvdisplay | grep /dev/vg02/storage)
 if [ ! "$sp" ];then
-  echo 'Ready to create neutron storage'
+  echo 'Ready to create storage'
   lvcreate -l 100%FREE -n storage vg02
   mkfs -t ext4 /dev/vg02/storage
+fi
+
+sp=$(mount | grep /storage)
+if [ ! "$sp" ]; then
   mount /dev/vg02/storage /storage/
   echo '/dev/vg02/storage    /storage    ext4    default    0    2' >> /etc/fstab
 fi
