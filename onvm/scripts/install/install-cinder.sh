@@ -29,6 +29,8 @@ iniset /etc/cinder/cinder.conf keystone_authtoken project_name 'service'
 iniset /etc/cinder/cinder.conf keystone_authtoken username 'cinder'
 iniset /etc/cinder/cinder.conf keystone_authtoken password $1
 
+iniset /etc/cinder/cinder.conf keymgr encryption_auth_url http://$leap_logical2physical_keystone:5000/v3
+
 iniset /etc/cinder/cinder.conf 'oslo_concurrency' 'lock_path' '/var/lib/cinder/tmp'
 
 iniremcomment /etc/cinder/cinder.conf
