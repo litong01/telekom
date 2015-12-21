@@ -46,3 +46,4 @@ cindervg: vg02
 
 ntpserver: mysqldb
 
+backuphost: controller
