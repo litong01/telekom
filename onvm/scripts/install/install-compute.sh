@@ -25,7 +25,10 @@ iniset /etc/nova/nova.conf DEFAULT firewall_driver 'nova.virt.firewall.NoopFirew
 iniset /etc/nova/nova.conf vnc vncserver_listen '0.0.0.0'
 iniset /etc/nova/nova.conf vnc vncserver_proxyclient_address '$my_ip'
 iniset /etc/nova/nova.conf vnc enabled 'True'
-iniset /etc/nova/nova.conf vnc novncproxy_base_url http://$leap_logical2physical_nova:6080/vnc_auto.html
+
+vnchost=$(echo '$leap_'$leap_logical2physical_nova'_eth0')
+eval vnchost=$vnchost
+iniset /etc/nova/nova.conf vnc novncproxy_base_url http://$vnchost:6080/vnc_auto.html
 
 iniset /etc/nova/nova.conf glance host $leap_logical2physical_glance
 

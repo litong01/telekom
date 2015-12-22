@@ -4,6 +4,11 @@ controller:
   eth0: 192.168.1.90
   eth1: 192.168.15.9
 
+nova:
+  host_name: nova.leap.dev
+  eth0: 192.168.1.93
+  eth1: 192.168.15.13
+
 compute01:
   host_name: compute01.leap.dev
   eth0: 192.168.1.88
@@ -23,8 +28,8 @@ logical2physical:
   glance: controller
   cinder: controller
   neutron: controller
-  nova: controller
-  heat: controller
+  nova: nova
+  heat: nova
 
 ctlnodes:
   - mysqldb
@@ -46,4 +51,4 @@ cindervg: vg02
 
 ntpserver: mysqldb
 
-backuphost: controller
+backuphost: nova

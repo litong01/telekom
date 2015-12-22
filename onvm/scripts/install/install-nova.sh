@@ -15,7 +15,7 @@ iniset /etc/nova/nova.conf database connection mysql+pymysql://nova:$1@$leap_log
 iniset /etc/nova/nova.conf DEFAULT rpc_backend 'rabbit'
 iniset /etc/nova/nova.conf DEFAULT debug 'True'
 iniset /etc/nova/nova.conf DEFAULT auth_strategy 'keystone'
-iniset /etc/nova/nova.conf DEFAULT my_ip "$3"
+iniset /etc/nova/nova.conf DEFAULT my_ip "$2"
 iniset /etc/nova/nova.conf DEFAULT enabled_apis 'osapi_compute,metadata'
 
 iniset /etc/nova/nova.conf DEFAULT network_api_class 'nova.network.neutronv2.api.API'
@@ -30,7 +30,7 @@ iniset /etc/nova/nova.conf glance host $leap_logical2physical_glance
 
 iniset /etc/nova/nova.conf oslo_concurrency lock_path '/var/lib/nova/tmp'
 
-iniset /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host "${leap_logical2physical_rabbitmq}"
+iniset /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host $leap_logical2physical_rabbitmq
 iniset /etc/nova/nova.conf oslo_messaging_rabbit rabbit_userid openstack
 iniset /etc/nova/nova.conf oslo_messaging_rabbit rabbit_password $1
 
