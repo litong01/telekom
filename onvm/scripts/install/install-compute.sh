@@ -22,6 +22,10 @@ iniset /etc/nova/nova.conf DEFAULT security_group_api 'neutron'
 iniset /etc/nova/nova.conf DEFAULT linuxnet_interface_driver 'nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver'
 iniset /etc/nova/nova.conf DEFAULT firewall_driver 'nova.virt.firewall.NoopFirewallDriver'
 
+metahost=$(echo '$leap_'$leap_logical2physical_nova'_eth1')
+eval metahost=$metahost
+iniset /etc/nova/nova.conf DEFAULT metadata_host $metahost
+
 iniset /etc/nova/nova.conf vnc vncserver_listen '0.0.0.0'
 iniset /etc/nova/nova.conf vnc vncserver_proxyclient_address '$my_ip'
 iniset /etc/nova/nova.conf vnc enabled 'True'

@@ -82,7 +82,7 @@ sysctl -p
 
 
 # Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-echo "COnfigure linuxbridge agent"
+echo "Configure linuxbridge agent"
 
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth2,vlan:eth1'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
@@ -128,7 +128,10 @@ iniset /etc/neutron/metadata_agent.ini DEFAULT user_domain_id 'default'
 iniset /etc/neutron/metadata_agent.ini DEFAULT project_name 'service'
 iniset /etc/neutron/metadata_agent.ini DEFAULT username 'neutron'
 iniset /etc/neutron/metadata_agent.ini DEFAULT password $1
-iniset /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip $leap_logical2physical_neutron
+
+metahost=$(echo '$leap_'$leap_logical2physical_nova'_eth1')
+eval metahost=$metahost
+iniset /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip $metahost
 iniset /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret $1
 iniset /etc/neutron/metadata_agent.ini DEFAULT debug 'True'
 
