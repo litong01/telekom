@@ -84,7 +84,7 @@ sysctl -p
 # Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "Configure linuxbridge agent"
 
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth2,vlan:eth1'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth0,vlan:eth1'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
 
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'False'

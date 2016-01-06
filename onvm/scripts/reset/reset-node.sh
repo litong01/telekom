@@ -30,12 +30,16 @@ echo -e "  address $3" >> target/etc/network/interfaces
 echo -e "  netmask 255.255.255.0" >> target/etc/network/interfaces
 
 echo 'Processing /etc/hosts'
-sed -i '/^127.0.1.1/d' target/etc/hosts
-cat /onvm/conf/hosts >> target/etc/hosts
+
+sp=$(grep $1 /etc/hosts)
+if [ ! "$sp" ];then
+  sed -i '/^127.0.1.1/d' target/etc/hosts
+  cat /onvm/conf/hosts >> target/etc/hosts
+fi
 
 echo 'Setting up hostname'
 echo -e "$1" > target/etc/hostname
-echo 
+echo
 
 umount source/
 umount target/
