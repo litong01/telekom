@@ -44,10 +44,10 @@ compute04:
   eth0: 9.30.107.140
   eth1: 192.168.1.140
 
-#compute05:
-#  host_name: compute05.leap.dev
-#  eth0: 9.30.107.141
-#  eth1: 192.168.1.141
+compute05:
+  host_name: compute05.leap.dev
+  eth0: 9.30.107.141
+  eth1: 192.168.1.141
 
 public_net:
   cidr: 9.30.107.128/26
@@ -82,6 +82,7 @@ computenodes:
   - compute02
   - compute03
   - compute04
+  - compute05
 
 timezone: America/Los_Angeles
 
