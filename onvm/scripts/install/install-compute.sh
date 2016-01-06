@@ -107,7 +107,7 @@ iniset /etc/neutron/neutron.conf keystone_authtoken password $1
 # Configure the Linux bridge agent /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "Configure the Linux bridge agent!"
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'vlan:eth1'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'public:eth0,vlan:eth1'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vlan network_vlan_ranges 'vlan:101:200'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini vxlan enable_vxlan 'False'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini vxlan local_ip $3
