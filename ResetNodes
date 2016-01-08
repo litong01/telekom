@@ -57,23 +57,14 @@ Vagrant.configure("2") do |config|
         managed.server = nodes[key]['eth0']
       end
 
-      node.vm.provision "reset", type: "shell" do |s|
-        s.path = "onvm/scripts/reset/reset-node.sh"
+      node.vm.provision "hosts", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/setup-hosts.sh"
         s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
+        s.args += ' ' + nodes['logical2physical'][nodes['ntpserver']]
       end
 
       node.vm.provision "install-common", type: "shell" do |s|
         s.path = "onvm/scripts/reset/install-common.sh"
-        s.args = key + ' ' + nodes['logical2physical'][nodes['ntpserver']]
-      end
-
-      node.vm.provision "patch", type: "shell" do |s|
-        s.path = "onvm/scripts/reset/apply-patch.sh"
-      end
-
-      node.vm.provision "hosts", type: "shell" do |s|
-        s.path = "onvm/scripts/reset/setup-hosts.sh"
-        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
       end
 
       node.vm.provision "save", type: "shell" do |s|
@@ -92,6 +83,14 @@ Vagrant.configure("2") do |config|
         s.path = "onvm/scripts/reset/boot-node.sh"
       end
 
+      node.vm.provision "reset", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/reset-node.sh"
+        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
+      end
+
+      node.vm.provision "patch", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/apply-patch.sh"
+      end
     end
   end
 

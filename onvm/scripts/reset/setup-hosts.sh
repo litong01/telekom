@@ -2,6 +2,7 @@
 # $1 hostname
 # $2 public ip eth0
 # $3 public ip eth1
+# $4 chrony server hostname
 
 echo "Setting up eth1..."
 
@@ -17,5 +18,15 @@ if [ ! "$sp" ];then
 
   echo 'Setting up hostname'
   echo -e "$1" > /etc/hostname
+
+  sed -i '/^server /d' /etc/chrony/chrony.conf
+
+  if [ "$1" = "$4" ]; then
+    echo 'server 1.us.pool.ntp.org iburst' >> /etc/chrony/chrony.conf
+  else
+    echo "server $4 iburst" >> /etc/chrony/chrony.conf
+  fi
+
+service chrony restart
 fi
 

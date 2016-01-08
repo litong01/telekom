@@ -32,6 +32,8 @@ cd $dir
 umount source
 umount target
 
+rm -r -f source target
+
 lvremove -f "/dev/vg00/resetpoint"
 
 echo "System has been saved!"
