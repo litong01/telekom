@@ -57,11 +57,6 @@ Vagrant.configure("2") do |config|
         managed.server = nodes[key]['eth0']
       end
 
-      node.vm.provision "save", type: "shell" do |s|
-        s.path = "onvm/scripts/reset/save-node.sh"
-        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
-      end
-
       node.vm.provision "reset", type: "shell" do |s|
         s.path = "onvm/scripts/reset/reset-node.sh"
         s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
@@ -70,10 +65,6 @@ Vagrant.configure("2") do |config|
       node.vm.provision "install-common", type: "shell" do |s|
         s.path = "onvm/scripts/reset/install-common.sh"
         s.args = key + ' ' + nodes['logical2physical'][nodes['ntpserver']]
-      end
-
-      node.vm.provision "reboot", type: "shell" do |s|
-        s.path = "onvm/scripts/reset/boot-node.sh"
       end
 
       node.vm.provision "patch", type: "shell" do |s|
@@ -85,11 +76,20 @@ Vagrant.configure("2") do |config|
         s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
       end
 
+      node.vm.provision "save", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/save-node.sh"
+        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
+      end
+
       node.vm.provision "savebackup", type: "shell" do |s|
         s.path = "onvm/scripts/reset/save-backup.sh"
         s.args = key + ' ' + ids['username'] + ' ' + ids['password']
         s.args += ' ' + nodes['backuphost']
         s.args += ' ' + tstamp
+      end
+
+      node.vm.provision "reboot", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/boot-node.sh"
       end
 
     end
