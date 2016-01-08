@@ -80,6 +80,11 @@ Vagrant.configure("2") do |config|
         s.path = "onvm/scripts/reset/apply-patch.sh"
       end
 
+      node.vm.provision "hosts", type: "shell" do |s|
+        s.path = "onvm/scripts/reset/setup-hosts.sh"
+        s.args = key + ' ' + nodes[key]['eth0'] + ' ' + nodes[key]['eth1']
+      end
+
       node.vm.provision "savebackup", type: "shell" do |s|
         s.path = "onvm/scripts/reset/save-backup.sh"
         s.args = key + ' ' + ids['username'] + ' ' + ids['password']

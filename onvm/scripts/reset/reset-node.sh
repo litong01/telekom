@@ -23,22 +23,6 @@ cd target
 tar -xf ../source/cleansystem.tar.gz
 cd $dir
 
-echo "Setting up eth1..."
-
-sp=$(grep $1 /etc/hosts)
-if [ ! "$sp" ];then
-  echo -e "\nauto eth1" >> target/etc/network/interfaces
-  echo -e "iface eth1 inet static" >> target/etc/network/interfaces
-  echo -e "  address $3" >> target/etc/network/interfaces
-  echo -e "  netmask 255.255.255.0" >> target/etc/network/interfaces
-
-  sed -i '/^127.0.1.1/d' target/etc/hosts
-  cat /onvm/conf/hosts >> target/etc/hosts
-
-  echo 'Setting up hostname'
-  echo -e "$1" > target/etc/hostname
-fi
-
 umount source/
 umount target/
 

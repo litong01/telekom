@@ -42,7 +42,7 @@ fi
 sp=$(mount | grep /storage)
 if [ ! "$sp" ]; then
   mount /dev/vg02/storage /storage/
-  echo '/dev/vg02/storage    /storage    ext4    default    0    2' >> /etc/fstab
+  echo '/dev/mapper/vg02-storage    /storage    ext4    errors=continue    0    0' >> /etc/fstab
 fi
 
 

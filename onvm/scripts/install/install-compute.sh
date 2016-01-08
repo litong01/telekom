@@ -85,6 +85,7 @@ confset /etc/sysctl.conf net.ipv4.conf.default.rp_filter 0
 confset /etc/sysctl.conf net.ipv4.conf.all.rp_filter 0
 confset /etc/sysctl.conf net.bridge.bridge-nf-call-iptables 1
 confset /etc/sysctl.conf net.bridge.bridge-nf-call-ip6tables 1
+confset /etc/sysctl.conf net.ipv4.ip_forward 1
 
 sysctl -p
 
