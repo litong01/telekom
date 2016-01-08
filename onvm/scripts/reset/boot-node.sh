@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-update-grub
+#update-grub
 shutdown -r +1 &
-
-

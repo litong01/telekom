@@ -21,6 +21,7 @@ mount /dev/vg00/resetpoint target
 rm -r -f target/*
 cd target
 tar -xf ../source/cleansystem.tar.gz
+sed -i '/^GRUB_HIDDEN_TIMEOUT/d' etc/default/grub
 cd $dir
 
 umount source/
@@ -28,5 +29,4 @@ umount target/
 
 lvconvert --merge /dev/vg00/resetpoint
 
-shutdown -r +1 &
-
+vgchange -a y vg00
