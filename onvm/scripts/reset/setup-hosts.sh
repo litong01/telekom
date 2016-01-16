@@ -19,14 +19,18 @@ if [ ! "$sp" ];then
   echo 'Setting up hostname'
   echo -e "$1" > /etc/hostname
 
-  sed -i '/^server /d' /etc/chrony/chrony.conf
+  if [ -e /etc/chrony/chrony.conf ]; then
 
-  if [ "$1" = "$4" ]; then
-    echo 'server 1.us.pool.ntp.org iburst' >> /etc/chrony/chrony.conf
-  else
-    echo "server $4 iburst" >> /etc/chrony/chrony.conf
+    sed -i '/^server /d' /etc/chrony/chrony.conf
+
+    if [ "$1" = "$4" ]; then
+      echo 'server 1.us.pool.ntp.org iburst' >> /etc/chrony/chrony.conf
+    else
+      echo "server $4 iburst" >> /etc/chrony/chrony.conf
+    fi
+
+    service chrony restart
   fi
 
-service chrony restart
 fi
 

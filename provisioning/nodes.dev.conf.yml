@@ -2,17 +2,17 @@
 controller:
   host_name: controller.leap.dev
   eth0: 192.168.1.90
-  eth1: 192.168.15.9
+  eth1: 192.168.15.90
 
 nova:
   host_name: nova.leap.dev
   eth0: 192.168.1.93
-  eth1: 192.168.15.13
+  eth1: 192.168.15.93
 
 compute01:
   host_name: compute01.leap.dev
   eth0: 192.168.1.88
-  eth1: 192.168.15.8
+  eth1: 192.168.15.88
 
 public_net:
   cidr: 192.168.1.0/24

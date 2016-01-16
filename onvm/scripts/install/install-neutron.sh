@@ -57,19 +57,19 @@ iniset /etc/neutron/neutron.conf nova password $1
 # Configure /etc/neutron/plugins/ml2/ml2_conf.ini
 echo "Configure Modular Layer 2 (ML2) plug-in"
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers 'flat,vlan'
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types 'vlan'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers 'flat,vxlan'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types 'vxlan'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers 'linuxbridge,l2population'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers 'port_security'
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_flat flat_networks 'public'
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vni_ranges '1001:2000'
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'public:eth0,vlan:eth1'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'public:eth0,vxlan:eth1'
 
 # Configure the kernel to enable packet forwarding and disable reverse path filting
 echo 'Configure the kernel to enable packet forwarding and disable reverse path filting'
@@ -84,13 +84,16 @@ sysctl -p
 # Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 echo "Configure linuxbridge agent"
 
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth0,vlan:eth1'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'public:eth0,vxlan:eth1'
+#iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vlan network_vlan_ranges 'public,vlan:101:200'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vxlan vni_ranges '1:1000'
 
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'False'
-#iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan local_ip $3
-#iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan l2_population 'True'
+
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'True'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan local_ip $3
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan l2_population 'True'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent prevent_arp_spoofing 'True'
+iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent tunnel_types vxlan
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup firewall_driver 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
 
@@ -115,6 +118,7 @@ iniset /etc/neutron/dhcp_agent.ini DEFAULT use_namespaces ' True'
 iniset /etc/neutron/dhcp_agent.ini DEFAULT dhcp_delete_namespaces 'True'
 iniset /etc/neutron/dhcp_agent.ini DEFAULT dnsmasq_config_file '/etc/neutron/dnsmasq-neutron.conf'
 echo 'dhcp-option-force=26,1450' > /etc/neutron/dnsmasq-neutron.conf
+
 
 #Configure /etc/neutron/metadata_agent.ini
 echo "Configure the metadata agent"

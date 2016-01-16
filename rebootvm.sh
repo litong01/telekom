@@ -1,7 +1,7 @@
-VBoxManage snapshot h2-90 restore "Snapshot 1"
-VBoxManage snapshot h2-88 restore "Snapshot 1"
-VBoxManage snapshot h2-93 restore "Snapshot 1"
+VBoxManage snapshot h2-compute01 restore "Snapshot 2"
+VBoxManage snapshot h2-nova restore "Snapshot 2"
+VBoxManage snapshot h2-controller restore "Snapshot 2"
 
-vboxmanage startvm h2-90 --type headless
-vboxmanage startvm h2-88 --type headless
-vboxmanage startvm h2-93 --type headless
+vboxmanage startvm h2-compute01 --type headless
+vboxmanage startvm h2-nova --type headless
+vboxmanage startvm h2-controller --type headless
