@@ -52,3 +52,9 @@ cindervg: vg02
 ntpserver: mysqldb
 
 backuphost: nova
+
+# The supported network types are openvswitch & linuxbridge
+#
+network: openvswitch
+
+pubnic: eth0

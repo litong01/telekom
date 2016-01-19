@@ -91,3 +91,7 @@ cindervg: vg02
 ntpserver: mysqldb
 
 backuphost: nova
+
+network: ovs
+
+pubnic: eth0
