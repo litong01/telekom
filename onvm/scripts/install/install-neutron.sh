@@ -69,7 +69,7 @@ iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vxlan_group '239.1.1
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers "${leap_network},l2population"
 
 
-if [ "$leap_network" -eq 'openvswitch' ]; then
+if [ "$leap_network" = 'openvswitch' ]; then
   iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
   iniset /etc/neutron/plugins/ml2/ml2_conf.ini ovs local_ip $3
   iniset /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling True
@@ -158,7 +158,7 @@ su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
   --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 
 
-if [ "$leap_network" -eq 'openvswitch' ]; then
+if [ "$leap_network" = 'openvswitch' ]; then
   service openvswitch-switch restart
   ovs-vsctl add-br br-ex
 fi

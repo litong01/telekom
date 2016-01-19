@@ -128,7 +128,7 @@ iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vxlan_group '239.1.1
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
 
-if [ "$leap_network" -eq 'openvswitch' ]; then
+if [ "$leap_network" = 'openvswitch' ]; then
   echo "Configure openvswitch agent"
   iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 
@@ -169,7 +169,7 @@ iniremcomment /etc/neutron/plugins/ml2/ml2_conf.ini
 rm -f /var/lib/nova/nova.sqlite
 
 service nova-compute restart
-if [ "$leap_network" -eq 'openvswitch' ]; then
+if [ "$leap_network" = 'openvswitch' ]; then
   service openvswitch-switch restart
 fi
 
