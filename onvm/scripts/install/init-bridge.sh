@@ -8,5 +8,4 @@ source /onvm/scripts/ini-config
 eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 echo "Setup public ovs bridge..."
-ovs-vsctl add-port br-ex $leap_pubnic
-ifconfig $leap_pubnic 0.0.0.0;ifconfig br-ex $2
+ovs-vsctl add-port br-ex $leap_pubnic;ifconfig $leap_pubnic 0.0.0.0;ifconfig br-ex $2
