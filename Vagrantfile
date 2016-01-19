@@ -87,4 +87,20 @@ Vagrant.configure("2") do |config|
         s.args = ids['sys_password']
       end
   end
+
+  # do initial setup ovs bridge with the external network
+  # all initialization should run on neutron controller node
+  config.vm.define "init-bridge" do |node|
+      node.vm.provider :managed do |managed|
+        managed.server = nodes[nodes['logical2physical']['neutron']]['eth0']
+      end
+
+      node.vm.provision "init-bridge", type: "shell" do |s|
+        s.path = "onvm/scripts/install/init-bridge.sh"
+        s.args = ids['sys_password']
+        s.args += nodes[nodes['logical2physical']['neutron']]['eth0']
+        s.args += nodes[nodes['logical2physical']['neutron']]['eth1']
+      end
+  end
+
 end

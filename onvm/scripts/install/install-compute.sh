@@ -8,7 +8,7 @@ eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 apt-get -qqy update
 apt-get install -qqy nova-compute sysfsutils
-apt-get install -qqy neutron-plugin-linuxbridge-agent
+apt-get install -qqy neutron-plugin-openvswitch-agent
 
 echo "Compute packages are installed!"
 
@@ -86,7 +86,7 @@ confset /etc/sysctl.conf net.ipv4.conf.default.rp_filter 0
 confset /etc/sysctl.conf net.ipv4.conf.all.rp_filter 0
 confset /etc/sysctl.conf net.bridge.bridge-nf-call-iptables 1
 confset /etc/sysctl.conf net.bridge.bridge-nf-call-ip6tables 1
-confset /etc/sysctl.conf net.ipv4.ip_forward 1
+#confset /etc/sysctl.conf net.ipv4.ip_forward 1
 
 sysctl -p
 
@@ -106,24 +106,39 @@ iniset /etc/neutron/neutron.conf keystone_authtoken project_name 'service'
 iniset /etc/neutron/neutron.conf keystone_authtoken username 'neutron'
 iniset /etc/neutron/neutron.conf keystone_authtoken password $1
 
-# Configure the Linux bridge agent /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-echo "Configure the Linux bridge agent!"
+inidelete /etc/neutron/neutron.conf keystone_authtoken identity_uri
+inidelete /etc/neutron/neutron.conf keystone_authtoken admin_tenant_name
+inidelete /etc/neutron/neutron.conf keystone_authtoken admin_user
+inidelete /etc/neutron/neutron.conf keystone_authtoken admin_password
+
+
+# Configure the OVS agent /etc/neutron/plugins/ml2/ml2_conf.ini
+echo "Configure the OVS agent!"
 
 echo "Configure Modular Layer 2 (ML2) plug-in"
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers 'flat,vxlan'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types 'vxlan'
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers 'linuxbridge,l2population'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers 'openvswitch,l2population'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers 'port_security'
 
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_flat flat_networks 'public'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vni_ranges '1001:2000'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_vxlan vxlan_group '239.1.1.1'
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group 'True'
 iniset /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset 'True'
 
-iniset /etc/neutron/plugins/ml2/ml2_conf.ini linux_bridge physical_interface_mappings 'vxlan:eth1'
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ovs local_ip $3
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling True
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ovs integration_bridge br-int
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini ovs tunnel_bridge br-tun
+
+
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini agent l2_population True
+iniset /etc/neutron/plugins/ml2/ml2_conf.ini agent tunnel_types vxlan
+
 
 # Configure the kernel to enable packet forwarding and disable reverse path filting
 echo 'Configure the kernel to enable packet forwarding and disable reverse path filting'
@@ -135,31 +150,15 @@ echo 'Load the new kernel configuration'
 sysctl -p
 
 
-# Configure /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-echo "Configure linuxbridge agent"
-
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini linux_bridge physical_interface_mappings 'vxlan:eth1'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini ml2_type_vxlan vni_ranges '1:1000'
-
-
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan enable_vxlan 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan local_ip $3
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini vxlan l2_population 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent prevent_arp_spoofing 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini agent tunnel_types vxlan
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup enable_security_group 'True'
-iniset /etc/neutron/plugins/ml2/linuxbridge_agent.ini securitygroup firewall_driver 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
-
-
 iniremcomment /etc/nova/nova.conf
 iniremcomment /etc/neutron/neutron.conf
-iniremcomment /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 iniremcomment /etc/neutron/plugins/ml2/ml2_conf.ini
 
 
 rm -f /var/lib/nova/nova.sqlite
 
 service nova-compute restart
-service neutron-plugin-linuxbridge-agent restart
+service openvswitch-switch restart
+service neutron-plugin-openvswitch-agent restart
 
 echo "Compute setup is now complete!"
