@@ -55,6 +55,6 @@ backuphost: nova
 
 # The supported network types are openvswitch & linuxbridge
 #
-network: openvswitch
+network: linuxbridge
 
 pubnic: eth0
