@@ -84,7 +84,7 @@ computenodes:
   - compute04
   - compute05
 
-timezone: America/Los_Angeles
+timezone: America\/Los_Angeles
 
 cindervg: vg02
 
@@ -92,6 +92,8 @@ ntpserver: mysqldb
 
 backuphost: nova
 
-network: ovs
+# The supported network types are openvswitch & linuxbridge
+#
+network: linuxbridge
 
 pubnic: eth0

@@ -45,7 +45,7 @@ ctlnodes:
 computenodes:
   - compute01
 
-timezone: EST
+timezone: America\/New_York
 
 cindervg: vg02
 
