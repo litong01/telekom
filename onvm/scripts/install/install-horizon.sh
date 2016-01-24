@@ -6,7 +6,7 @@
 source /onvm/scripts/ini-config
 eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
-apt-get -qqy install openstack-dashboard
+apt-get -qqy "$leap_aptopt" install openstack-dashboard
 
 cmdStr=$(echo 's/^OPENSTACK_HOST = "127.0.0.1"/OPENSTACK_HOST = "'$leap_logical2physical_keystone'"/g')
 

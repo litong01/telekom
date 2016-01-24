@@ -1,0 +1,10 @@
+
+deb http://repo/ubuntu trusty main restricted universe multiverse
+deb http://repo/ubuntu trusty-security main restricted universe multiverse
+deb http://repo/ubuntu trusty-updates main restricted universe multiverse
+
+deb-src http://repo/ubuntu trusty main restricted universe multiverse
+deb-src http://repo/ubuntu trusty-security main restricted universe multiverse
+deb-src http://repo/ubuntu trusty-updates main restricted universe multiverse
+
+deb http://repo/cubuntu trusty-updates/liberty main

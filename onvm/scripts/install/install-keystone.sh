@@ -8,7 +8,7 @@ eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 echo "manual" > /etc/init/keystone.override
 
-apt-get install -qqy keystone apache2 libapache2-mod-wsgi memcached python-memcache
+apt-get install -qqy "$leap_aptopt" keystone apache2 libapache2-mod-wsgi memcached python-memcache
 
 echo "Keystone packages are installed!"
 

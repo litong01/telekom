@@ -6,7 +6,7 @@
 source /onvm/scripts/ini-config
 eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
-apt-get install -qqy glance python-glanceclient
+apt-get install -qqy "$leap_aptopt" glance python-glanceclient
 
 echo "Glance packages are installed!"
 

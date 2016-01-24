@@ -8,7 +8,7 @@ eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 # Make sure that the configuration in conf.yml file is correct in terms of
 # what network to use
-apt-get install -qqy neutron-server vlan neutron-plugin-ml2 \
+apt-get install -qqy "$leap_aptopt" neutron-server vlan neutron-plugin-ml2 \
   neutron-plugin-"${leap_network}"-agent neutron-l3-agent neutron-dhcp-agent \
   neutron-metadata-agent python-neutronclient
 

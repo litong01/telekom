@@ -6,7 +6,7 @@
 source /onvm/scripts/ini-config
 eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
-apt-get install -qqy nova-api nova-cert nova-conductor nova-consoleauth \
+apt-get install -qqy "$leap_aptopt" nova-api nova-cert nova-conductor nova-consoleauth \
   nova-novncproxy nova-scheduler python-novaclient
 
 echo "Nova packages are installed!"

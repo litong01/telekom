@@ -6,7 +6,7 @@
 source /onvm/scripts/ini-config
 eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
-apt-get install -qqy cinder-api cinder-scheduler python-cinderclient
+apt-get install -qqy "$leap_aptopt" cinder-api cinder-scheduler python-cinderclient
 
 echo "Cinder packages are installed!"
 

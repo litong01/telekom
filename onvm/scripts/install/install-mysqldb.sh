@@ -4,11 +4,12 @@
 # $3 private ip eth1
 
 source /onvm/scripts/ini-config
+eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
 debconf-set-selections <<< "mariadb-server-5.5 mysql-server/root_password password $1"
 debconf-set-selections <<< "mariadb-server-5.5 mysql-server/root_password_again password $1"
 
-apt-get -qqy install mariadb-server python-pymysql
+apt-get -qqy "$leap_aptopt" install mariadb-server python-pymysql
 
 echo "Installed MariaDB!"
 

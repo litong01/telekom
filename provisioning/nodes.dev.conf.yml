@@ -1,4 +1,9 @@
 ---
+repo:
+  host_name: repo.leap.dev
+  eth0: 192.168.1.88
+  eth1: 192.168.15.88
+
 controller:
   host_name: controller.leap.dev
   eth0: 192.168.1.90
@@ -11,8 +16,8 @@ nova:
 
 compute01:
   host_name: compute01.leap.dev
-  eth0: 192.168.1.88
-  eth1: 192.168.15.88
+  eth0: 192.168.1.130
+  eth1: 192.168.15.130
 
 public_net:
   cidr: 192.168.1.0/24
@@ -58,3 +63,7 @@ backuphost: nova
 network: linuxbridge
 
 pubnic: eth0
+
+uselocalrepo: yes
+
+aptopt: --force-yes

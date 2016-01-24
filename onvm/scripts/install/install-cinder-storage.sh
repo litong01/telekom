@@ -6,7 +6,7 @@
 source /onvm/scripts/ini-config
 eval $(parse_yaml '/onvm/conf/nodes.conf.yml' 'leap_')
 
-apt-get install -qqy cinder-volume python-mysqldb
+apt-get install -qqy "$leap_aptopt" cinder-volume python-mysqldb
 
 echo "Cinder storage packages are installed!"
 
