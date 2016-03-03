@@ -1,8 +1,8 @@
 
-if [ "$VAGRANT_VAGRANTFILE" == "Vagrantfile" ];then
-    export VAGRANT_VAGRANTFILE="ResetNodes"
+if [ "$VAGRANT_VAGRANTFILE" == 'Vagrantfile' ];then
+    export VAGRANT_VAGRANTFILE=ResetNodes
 else
-    export VAGRANT_VAGRANTFILE="Vagrantfile"
+    export VAGRANT_VAGRANTFILE=Vagrantfile
 fi
 export VAGRANT_DEFAULT_PROVIDER=managed
 echo 'Env is now '$VAGRANT_VAGRANTFILE

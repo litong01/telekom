@@ -5,3 +5,4 @@
 /onvm/conf/hosts
 *.out
 *.log
+*.DS_*

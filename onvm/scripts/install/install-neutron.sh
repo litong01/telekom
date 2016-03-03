@@ -122,6 +122,9 @@ iniset /etc/neutron/dhcp_agent.ini DEFAULT dhcp_driver 'neutron.agent.linux.dhcp
 iniset /etc/neutron/dhcp_agent.ini DEFAULT enable_isolated_metadata 'True'
 iniset /etc/neutron/dhcp_agent.ini DEFAULT use_namespaces ' True'
 iniset /etc/neutron/dhcp_agent.ini DEFAULT dhcp_delete_namespaces 'True'
+iniset /etc/neutron/dhcp_agent.ini DEFAULT dnsmasq_config_file '/etc/neutron/dnsmasq-neutron.conf'
+
+echo 'dhcp-option-force=26,1454' > /etc/neutron/dnsmasq-neutron.conf
 
 #Configure /etc/neutron/metadata_agent.ini
 echo "Configure the metadata agent"

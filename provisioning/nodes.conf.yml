@@ -63,6 +63,7 @@ logical2physical:
   glance: glance
   cinder: glance
   neutron: neutron
+  ceilometer: keystone
   nova: nova
   heat: nova
 
@@ -76,6 +77,7 @@ ctlnodes:
   - nova
   - heat
   - horizon
+  - ceilometer
 
 computenodes:
   - compute01
@@ -97,3 +99,11 @@ backuphost: nova
 network: linuxbridge
 
 pubnic: eth0
+
+uselocalrepo: yes
+
+aptopt: --force-yes
+
+qradar_endpoint: http://qradar:1234/endpoint
+
+cadf_only: true

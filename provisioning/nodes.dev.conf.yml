@@ -33,6 +33,7 @@ logical2physical:
   glance: controller
   cinder: controller
   neutron: controller
+  ceilometer: controller
   nova: nova
   heat: nova
 
@@ -46,6 +47,7 @@ ctlnodes:
   - nova
   - heat
   - horizon
+  - ceilometer
 
 computenodes:
   - compute01
@@ -67,3 +69,7 @@ pubnic: eth0
 uselocalrepo: yes
 
 aptopt: --force-yes
+
+qradar_endpoint: http://qradar:1234/endpoint
+
+cadf_only: true
